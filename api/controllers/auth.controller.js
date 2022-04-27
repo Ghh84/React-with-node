@@ -8,7 +8,7 @@ const signin = (req, res) => {
     var connection=mysql.createConnection({
       host:'localhost',
       user:'root',
-      password:'password',
+      password:'hani1984',
       database:'demoDb',
       port:'3306'
   

@@ -12,7 +12,6 @@ import Balance from './components/balance/balance'
 import AuthService from './services/auth.service';
 
 class App extends Component {
-
   render() {
     return (
       <Router>
