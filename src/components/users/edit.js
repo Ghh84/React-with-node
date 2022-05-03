@@ -2,7 +2,7 @@ import { Button, Alert } from "react-bootstrap";
 const Edit=({  setPageState})=>{
     return(
         <div className="Page">
-            <div className="section">
+            {/* <div className="section">
                 <div className="section-item">
                     <b>Name</b>
                     <input type='text'></input>
@@ -33,7 +33,7 @@ const Edit=({  setPageState})=>{
                     variant="warning"
                     onClick={() => setPageState({ isEdit: 0, isAdd: 0 })}
                   >Cancel</Button>
-            </div>
+            </div> */}
         </div>
     )
     }

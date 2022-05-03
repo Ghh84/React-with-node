@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Alert } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import UserService from '../../services/user.service';
-import Countries from "../../utils/countries";
 import _ from 'lodash'
 const Add=({handlePageSwitch})=>{
       const [sName,setsName]=useState('')

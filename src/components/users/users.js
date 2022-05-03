@@ -1,9 +1,15 @@
 import React,{useEffect, useState} from 'react'
 import { Button, Alert } from "react-bootstrap";
 import UserService from '../../services/user.service';
+import SearchBox from '../common/searchBox';
+import Select from '../common/select';
+import Input from '../common/input';
+import Country from '../common/country';
+
 
 
 const Add=({handlePageSwitch})=>{
+
       const [name,setName]=useState('')
       const [city,setCity]=useState('')
       const [phone,setPhone]=useState('')
@@ -22,7 +28,7 @@ const Add=({handlePageSwitch})=>{
           if(obj.name==''||obj.username==''||obj.password=='') setMessage('One or more information is missing!')
           else{
               
-              UserService.editUser(obj).then((res)=>{
+              UserService.addUser(obj).then((res)=>{
                   console.log('successfully added',res.data)
                   setErrored('')
                   setSucceded('A new user is successfully added!')
@@ -47,81 +53,100 @@ const Add=({handlePageSwitch})=>{
                             <Alert variant='success'>{succeded}</Alert>}
                     {!!errored &&
                             <Alert variant='danger'>{errored}</Alert>}
+                    
+
+
                     <form method="POST">
+                         {/* <div>
+                        </div> 
+                        <SearchBox value={name} onChange={setName} /> */}
+
                         <div className="row row-space">
-                            <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">Name</label>
+                             <div className="col-2">
+                             <Input name={name} label="Name" required="required" setUsername={setName} error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Name</label>
                                     <input className="input--style-4" type="text" onChange={(e)=>setName(e.target.value)} name="first_name"/>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">City</label>
+                            <Input name={city} label="City" required="required" setUsername={setCity} error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">City</label>
                                     <input className="input--style-4" type="text"  onChange={(e)=>setCity(e.target.value)} name="first_name"/>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className="row row-space">
-                            <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">Country</label>
+                            <div className="col-2"> 
+                            <label className="label" class='required'>Country</label>                             
+                                <Country />                                 
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Country</label>
                                     <div className="input-group-icon">
                                         <input className="input--style-4 js-datepicker" onChange={(e)=>setCountry(e.target.value)} type="text" name="birthday"/>
                                         <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="col-2">
-                                <div className="input-group">
+                            <Input name={email} label="Email" required="" setUsername={setEmail} error=""/>
+                                {/* <div className="input-group">
                                     <label className="label">Email</label>
                                     <div className="input-group-icon">
                                         <input className="input--style-4 js-datepicker" type="email" onChange={(e)=>setEmail(e.target.value)} name="birthday"/>
                                         <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                    </div>
-                                </div>
+                                    </div> 
+                                </div>*/}
                             </div>
                             
                         </div>
                         <div className="row row-space">
                             <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">Balance</label>
+                            <Input name={balance} label="Balance" required="required" setUsername={setBalance} error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Balance</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setBalance(e.target.value)} name="email"/>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">Phone</label>
+                                <Input name={phone} label="Phone" required="required" setUsername={setPhone} error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Phone</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setPhone(e.target.value)} name="phone"/>
-                                </div>
+                                </div> */}
                             </div>
-                        </div>
+                        </div> 
                         <hr style={{color:'blue',height:'2px'}}/><br/>
                         <div className="row row-space">
-                            <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">Username</label>
+                            <div className="col-3" style={{width: '185px'}}>
+                                <Input name={username} label="Username" required="required" setUsername={setUsername} error=""/>
+
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Username</label>
                                     <input className="input--style-4" type="text" onChange={(e)=>setUsername(e.target.value)} name="email"/>
-                                </div>
+                                </div> */}
                             </div>
-                            <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">Password</label>
+                            <div style={{width: '185px'}}>
+                                <Input name={password} label="Password" required="required" setUsername={setPassword} error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Password</label>
                                     <input className="input--style-4" type="password"  onChange={(e)=>setPassword(e.target.value)} name="phone"/>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
+
                         <div className="input-group">
-                            <div className="rs-select2 js-select-simple select--no-search">
+                        <Select name={name} label="Choose Role" option='1' setRole={setRole} />
+                            {/* <div className="rs-select2 js-select-simple select--no-search">
                                 <select class='form-control selectpicker' onChange={(e)=>setRole(e.target.value)}>
-                                    <option disabled="disabled" selected="selected">Choose role</option>
+                                    <option disabled="disabled" selected="selected" >Choose role</option>
                                     <option> 1</option>
                                     <option> 2</option>
                                     <option> 3</option>
                                 </select>
                                 <div className="select-dropdown"></div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="row row-space">
                         <div className="row ">
@@ -134,7 +159,7 @@ const Add=({handlePageSwitch})=>{
                     
                     </div>
                         </div>
-                    </form>
+                    </form> 
                 </div>
             </div>
         </div>
@@ -158,7 +183,7 @@ const Edit=({handlePageSwitch,selectedUser})=>{
     const [id,setUserId]=useState(selectedUser.id)
     function handleEdit(){
         const obj={name,city,country,phone,email,balance,role,username,password,id}
-        if(obj.name==''||obj.username==''||obj.password=='') {
+        if(obj.name===''||obj.username===''||obj.password==='') {
             setErrored('')
             setSucceded('')
             setMessage('One or more information is missing!')}
@@ -189,7 +214,8 @@ const Edit=({handlePageSwitch,selectedUser})=>{
                             <Alert variant='success'>{succeded}</Alert>}
                     {!!errored &&
                             <Alert variant='danger'>{errored}</Alert>}
-                    <form method="POST">
+                    
+                     <form method="POST">
                         <div className="row row-space">
                             <div className="col-2">
                                 <div className="input-group">
@@ -275,7 +301,7 @@ const Edit=({handlePageSwitch,selectedUser})=>{
                     
                     </div>
                         </div>
-                    </form>
+                    </form> 
                 </div>
             </div>
         </div>
@@ -308,6 +334,8 @@ const Users =()=>{
         setPageState({ isEdit: 0, isAdd: 0 })
         window.location.reload(false)
     }
+    
+
     return(
         <div>
             { !isEdit?
@@ -337,10 +365,11 @@ const Users =()=>{
                 </div>
                 </div>):!isAdd?
                 <Edit handlePageSwitch={handlePageSwitch} selectedUser={selectedUser}></Edit>:<Add handlePageSwitch={handlePageSwitch}></Add>
-}   
+                     }   
 
         </div>
     )
 }
+
 
 export default Users

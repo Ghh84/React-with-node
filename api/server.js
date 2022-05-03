@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require("./routes/auth.routes")(app);
 require("./routes/transaction.route")(app);
 require("./routes/user.route")(app);
+require("./routes/balanceRequest.route")(app);
  require("./routes/balance.route")(app);
 /*require("./routes/transaction.route")(app);
 require("./routes/user.route")(app); */

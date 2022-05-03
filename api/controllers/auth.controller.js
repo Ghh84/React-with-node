@@ -9,20 +9,25 @@ const signin = (req, res) => {
       host:'localhost',
       user:'root',
       password:'hani1984',
-      database:'demoDb',
+      database:'demodb',
       port:'3306'
   
   })
+  if(!connection._connectCalled ){
+    connection.connect();
+  }
+  
   const sql="SELECT * from  users where username=? AND password=?"
+
     connection.query(sql,[req.body.username,req.body.password],(err,rows)=>{
       if(err){
           throw err
       }else {
         if(!_.isEmpty(rows)){
-          console.log('data sent...',rows[0].name,rows.name)
+          console.log('data sent...',rows[0].name,rows.role)
+          res.status(200).send({username:rows[0].username,role:rows[0].role,id:rows[0].id});
         }
-         if(!_.isEmpty(rows)) res.status(200).send({username:rows[0].username,role:rows[0].role,id:rows[0].id});
-         else res.status(400).send({ message:'Invalid credentials! Try again' });
+        else res.status(400).send({ message:'Invalid credentials! Try again' });
       }
       
     })

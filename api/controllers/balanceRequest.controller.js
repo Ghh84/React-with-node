@@ -1,4 +1,5 @@
 
+//import { Alert } from 'react-bootstrap';
 const _=require('lodash')
 const mysql=require('mysql')
 var connection=mysql.createConnection({
@@ -12,16 +13,24 @@ var connection=mysql.createConnection({
 if(!connection._connectCalled ){
   connection.connect();
 }
-const sql="SELECT t.*,u.id,u.name from  transactions as t INNER JOIN users as u ON t.userId= u.id ORDER BY createdDate DESC"
-const sqlInsert="INSERT INTO transactions (sName,sCity,sAmount,sCountry,sCurrency,sPhone,sEmail,rName,rCity,rAmount,rCountry:,rCurrency,rPhone,rEmail,userId,referenceP) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+const sql="SELECT * from  balancerequest where status='Pending' ORDER BY createdDate ASC"
 
-const getTransactions = (req, res) => {
-  
-
-
- 
+const getRequest = (req, res) => {
+  console.log("I reached Talla")
+  console.log("came in transaction controller...........");
+  connection.query(sql,(err,row)=>{
+    if(err){
+      console.log('error occured',err)
+    }
+    else{
+      console.log('returned records')
+      res.status(200).send(row)
+    }
+})
 };
-const addTransaction = (req, res) => {
+
+
+const addRequest = (req, res) => {
   let columns=[],values=[]
   for (const [key, value] of Object.entries(req.body)) {
     console.log(`${key}: ${value}`);
@@ -29,7 +38,7 @@ const addTransaction = (req, res) => {
     values.push(value)
   }
   
-   connection.query("INSERT INTO  transactions (sName,sCity,sAmount,sCountry,sCurrency,sPhone,sEmail,rName,rCity,rAmount,rCountry,rCurrency,rPhone,rEmail,userId,referenceP,ticketNo) VALUES (?)",[values],(err,row)=>{
+   connection.query("INSERT INTO  balancerequest (Amount,currency,userId,comment) VALUES (?)",[values],(err,row)=>{
     if(err){
       console.log('error adding to transactions',err)
     }
@@ -40,6 +49,24 @@ const addTransaction = (req, res) => {
   }) 
  
 };
+const updateBalanceReauest=(req,res)=>{
+  let columns=[],values=[]
+  for (const [key, value] of Object.entries(req.body)) {
+    console.log(`${key}: ${value}`);
+    values.push(value)
+  }
+  connection.query("UPDATE  balancerequest SET status=? where id=?",
+  ['paid',values[2].id],(err,row)=>{
+    if(err){
+      console.log('error adding to transactions',err)
+      res.status(400).send('Error updating the transaction')
+    }
+    else{
+      console.log('returned records',row)
+      res.status(200).send(row)
+    }
+  })
+}
 const editTransaction = (req, res) => {
   let columns=[],values=[]
   let query=""
@@ -88,8 +115,9 @@ const getTransactionInfo = async (req, res) => {
 
 
 module.exports={
-  getTransactions,
-  addTransaction,
+  updateBalanceReauest,
+  getRequest,
+  addRequest,
   editTransaction,
   deleteTransaction,
   getAllTransactions,

@@ -3,8 +3,8 @@ const mysql=require('mysql')
 var connection=mysql.createConnection({
   host:'localhost',
   user:'root',
-  password:'password',
-  database:'demoDb',
+  password:'hani1984',
+  database:'demodb',
   port:'3306'
 
 })
