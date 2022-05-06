@@ -19,9 +19,6 @@ function Pagination({ data, pageLimit, dataLimit,handleSelection, selectedPage, 
       if (selectedPage !== "")
           setCurrentPage(selectedPage)
   }, [selectedPage])
-
-
-
   function goToNextPage() {
       setSelectedPage(currentPage + 1)
       setCurrentPage((page) => page + 1);
@@ -321,7 +318,7 @@ Pagination.propTypes = {
   pageLimit: PropTypes.number.isRequired,
   data: PropTypes.string.isRequired,
   setPageState:PropTypes.func.isRequired,
-  selectedPage:PropTypes.func.isRequired,
+  selectedPage:PropTypes.number.isRequired,
   setSelectedPage:PropTypes.func.isRequired,
   handleSelection:PropTypes.func.isRequired
 };

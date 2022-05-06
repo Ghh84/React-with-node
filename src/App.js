@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes,Route,Switch } from 'react-router-dom';
 //import Home from './components/Home';
 import Transaction from './components/transactions/transaction';
 import Login from './components/login';
+import Logout from './components/logout';
 import PrivateRoute from './components/privateRoute'
 import PublicRoute from './components/publicRoute'
 import Users from './components/users/users'
@@ -21,7 +22,7 @@ class App extends Component {
           <PrivateRoute component={Balance} path='/Balance' exact />
           <PublicRoute component={Login} path='/login' exact/>
           <PublicRoute component={Login} path='/' exact/>
-          <PublicRoute component={Login} path='/Logout' exact/>
+          <PublicRoute component={Logout} path='/Logout' exact/>
         </Switch>
       </Router>
     );

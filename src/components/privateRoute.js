@@ -25,7 +25,7 @@ import AuthService from '../services/auth.service';
 			
 			<nav>
 			   <ul>
-			   <li className="nav-item px-3">
+			   <li className="nav-item px-3" key={1}>
                         <div className="nav-link active">
                           <span
                             className="oi oi-home"
@@ -37,7 +37,7 @@ import AuthService from '../services/auth.service';
                         </div>
                       </li>
                       {AuthService.getCurrentUser().role==1 &&<>
-					  <li className="nav-item px-3">
+					  <li className="nav-item px-3" key={2}>
                         <div className="nav-link active">
                           <span
                             className="oi oi-home"
@@ -48,7 +48,7 @@ import AuthService from '../services/auth.service';
                           </Link>
                         </div>
                       </li>
-					  <li className="nav-item px-3">
+					  <li className="nav-item px-3" key={3}>
                         <div className="nav-link active">
                           <span
                             className="oi oi-home"
@@ -61,7 +61,7 @@ import AuthService from '../services/auth.service';
                       </li>
                       </>
                       }
-					  <li className="nav-item px-2">
+					  <li className="nav-item px-2" key={4}>
                         <div className="nav-link active">
                           <span
                             className="oi oi-home"
