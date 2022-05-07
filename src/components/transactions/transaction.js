@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+
 import React,{useEffect, useState,useRef} from 'react'
 import Add from './add';
 import Edit from './edit'
@@ -10,130 +10,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import UserService from '../../services/user.service';
 import configs from '../../configs/local'
 import AuthService from '../../services/auth.service';
+import Pagination from "../common/Pagination";
+import HomePage from "../common/homepage";
 
-function Pagination({ data, pageLimit, dataLimit,handleSelection, selectedPage, setSelectedPage }) {
-  console.log('data in pagingation',data.length)
-  const [pages] = useState(Math.round(data.length / dataLimit));
-  const [currentPage, setCurrentPage] = useState(1);
-  useEffect(() => {
-      if (selectedPage !== "")
-          setCurrentPage(selectedPage)
-  }, [selectedPage])
-  function goToNextPage() {
-      setSelectedPage(currentPage + 1)
-      setCurrentPage((page) => page + 1);
-  }
-
-  function goToPreviousPage() {
-      setSelectedPage(currentPage - 1)
-      setCurrentPage((page) => page - 1);
-  }
-
-  function changePage(event) {
-      const pageNumber = Number(event.target.textContent);
-      setSelectedPage(pageNumber)
-      setCurrentPage(pageNumber);
-  }
-
-  const getPaginatedData = () => {
-      const startIndex = currentPage * dataLimit - dataLimit;
-      const endIndex = startIndex + dataLimit;
-      // console.log('data to be displayed......',data.slice(startIndex, endIndex));
-      return data.slice(startIndex, endIndex);
-  };
-
-  const getPaginationGroup = () => {
-      let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit;
-      return new Array(pageLimit).fill().map((_, idx) => start + idx + 1);
-  };
- 
-  return (
-      <div>
-          {/* show the posts, 10 posts at a time */}
-          <div className="dataContainer">
-            <div className='table-responsive-sm'>
-          <table className='table table-hover'>
-                <thead>
-                  <tr>
-                    <th style={{color:'blue',backgroundColor:'#f8a915'}}>Ticket No</th>
-                    
-                    <th style={{color:'green',backgroundColor:'yellow'}}>Status</th>
-                    <th style={{color:'white',backgroundColor:'green'}}>Name</th>
-                    <th style={{color:'white',backgroundColor:'green'}}>City</th>
-                    <th style={{color:'white',backgroundColor:'green'}}>Amount</th>
-                    <th style={{color:'white',backgroundColor:'green'}}>Country</th>
-                    <th style={{color:'white',backgroundColor:'green'}}>Reference</th>
-                    <th style={{color:'white',backgroundColor:'blue'}}>Name</th>
-                    <th style={{color:'white',backgroundColor:'blue'}}>City</th>
-                    <th style={{color:'white',backgroundColor:'blue'}}>Amount</th>
-                    <th style={{color:'white',backgroundColor:'blue'}}>Country</th>
-                    {AuthService.getCurrentUser().role===1 &&
-                    <th style={{color:'green',backgroundColor:'yellow'}}>Agent</th>
-                    }
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                  {getPaginatedData().map((item,index)=>{
-                        return <tr >
-                                    <td className='nameTag' onClick={()=>handleSelection(item)}>{item.ticketNo}</td>
-                                   
-                                    <td style={{backgroundColor:'#FBFAC6',color:item.status==='Paid'?'green':item.status==='Pending'?'black':'red'}}><button style={{color:'white',fontSize:'10px',width:'20px',height:'20px',backgroundColor:item.status==='Paid'?'green':item.status==='NotPaid'?'red':'gray',borderRadius:'50%',marginRight:'5px'}}>{item.status==='Paid'?'✔':item.status==='NotPaid'?'X':''}</button>{item.status}</td>
-                                    <td style={{backgroundColor:'#A1F3A7'}}>{item.sName}</td>
-                                    <td style={{backgroundColor:'#A1F3A7'}}>{item.sCity}</td>
-                                    <td style={{backgroundColor:'#A1F3A7'}}>{item.sAmount}</td>
-                                    <td style={{backgroundColor:'#A1F3A7'}}>{item.sCountry}</td>
-                                    <td style={{backgroundColor:'#A1F3A7'}}>{item.sReference}</td>
-                                    <td style={{backgroundColor:'#B1B6F9'}}>{item.rName}</td>
-                                    <td style={{backgroundColor:'#B1B6F9'}}>{item.rCity}</td>
-                                    <td style={{backgroundColor:'#B1B6F9'}}>{item.rAmount}</td>
-                                    <td style={{backgroundColor:'#B1B6F9'}}>{item.rCountry}</td>
-                                    {AuthService.getCurrentUser().role===1 &&
-                                    <td style={{backgroundColor:'#FBFAC6'}}>{item.name}</td>
-                                    }
-                                    
-                      </tr>
-                      })}
-                  
-
-                </tbody>
-              </table>
-              </div>
-          </div>
-          <div className="paginationAuditContainer">
-              <div className="pagination">
-                  {/* previous button */}
-                  <button
-                      onClick={goToPreviousPage}
-                      className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
-                  >
-                      Prev
-                  </button>
-
-                  {/* show page numbers */}
-                  {getPaginationGroup().map((item, index) => (
-                      <button
-                          key={index}
-                          onClick={changePage}
-                          className={`paginationItem ${currentPage === item ? 'active' : null}`}
-                      >
-                          <span>{item}</span>
-                      </button>
-                  ))}
-
-                  {/* next button */}
-                  <button
-                      onClick={goToNextPage}
-                      className={`next ${currentPage === pages ? 'disabled' : ''}`}
-                  >
-                      Next
-                  </button>
-              </div>
-              <div className="empty"></div>
-          </div>
-      </div>
-  );
-}
 const Transaction=()=> {
   const [{ isEdit, isAdd,isRequest }, setPageState] = useState({ isEdit: 0, isAdd: 0,isRequest:0 })
   const [selectedTxn,setSelectedTxn]=useState([])
@@ -148,19 +27,15 @@ function handleSelection(item) {
     console.log('came to transaction selections..',item)
     setSelectedTxn(item)
     setPageState({ isEdit: 1, isAdd: 0,isRequest:0 })
-
 }
 function handleAdd() {
   setPageState({ isEdit: 1, isAdd: 1 ,isRequest:0})
-
 }
 function handleRequest() {
   //
   setPageState({ isRequest: 1, isAdd:0, isEdit:0})
-
 }
 function handleSeeRequest() {
-
   setPageState({ isRequest: 1, isAdd:0,isEdit:0})
   //<Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
 }
@@ -186,16 +61,12 @@ function handleChange(e,property){
  handleSearch(e,property)
 }
 function handlePageSwitch(){
-  
   setPageState({ isEdit: 0, isAdd: 0, isRequest:0});
   window.location.reload(false)
-  
 }
-
 useEffect(()=>{
    TransactionService.getAllTransactions().then((res)=>{
     const response=res.data
-    
     UserService.getUsers().then((res)=>{
       console.log('response from users',res.data)
       let userResponse=res.data
@@ -208,8 +79,7 @@ useEffect(()=>{
       }
       else{
          settxData(response) 
-           setUsers(res.data)}
-      
+           setUsers(res.data)} 
   })
   
    }).catch(err=>{
@@ -218,13 +88,10 @@ useEffect(()=>{
        
    })
 },[])
-
-
 console.log('user....',users)
-
   return(
         <div className='transactions'>         
-          {!isEdit && isRequest==0?(
+          {!isEdit && !isAdd && isRequest==0?(
             <div>
               <div className='search-row'>
               <div className="row-9"><span>&nbsp;&nbsp;</span></div>
@@ -288,21 +155,30 @@ console.log('user....',users)
           </div>
           </div>
           <div className='log-pagination'>
-          <Pagination
+        {/* transsaction first page after login  */}
+        <HomePage 
+           data={txData}
+           dataLimit={10}
+           handleSelection={handleSelection}
+        />
+        {/* adding pagination to the transaction page */}
+        <Pagination
                   data={txData}
-                  pageLimit={10}
-                  dataLimit={10}
+                  pageLimit={2}
+                  dataLimit={2}
                   setPageState={setPageState}
                   selectedPage={selectedPage}
                   setSelectedPage={setSelectedPage}
                   handleSelection={handleSelection}
-        />
+        /> 
         </div>
             </div>
             
-          ):isEdit && isRequest==0?
-        <Edit handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>:
-        <Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
+          ):isEdit && !isAdd && isRequest==0?(
+        <Edit handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>)
+        :!isEdit && isAdd && isRequest==1?
+        <Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>:
+        <Add handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
         }
         {/* {isRequest==1 &&
           <Add handlePageSwitch={handlePageSwitch}/>
@@ -310,17 +186,6 @@ console.log('user....',users)
         } */}
 
         </div>      
-  )
-      
+  )    
 }
-Pagination.propTypes = {
-  dataLimit: PropTypes.number.isRequired,
-  pageLimit: PropTypes.number.isRequired,
-  data: PropTypes.string.isRequired,
-  setPageState:PropTypes.func.isRequired,
-  selectedPage:PropTypes.number.isRequired,
-  setSelectedPage:PropTypes.func.isRequired,
-  handleSelection:PropTypes.func.isRequired
-};
-
 export default Transaction
