@@ -5,16 +5,20 @@ import _ from 'lodash'
 
 function Pagination({
   data,
-  pageLimit,
   dataLimit,
-  selectedPage,
   setSelectedPage,
+  currentPage,
+  setCurrentPage,
 }) {
-  const [pages] = useState(Math.round(data.length / dataLimit))
-  const [currentPage, setCurrentPage] = useState(1)
-  useEffect(() => {
-    if (selectedPage !== '') setCurrentPage(selectedPage)
-  }, [selectedPage])
+  //const [pages] = useState(Math.round(data.length / dataLimit))
+  //const [currentPage, setCurrentPage] = useState(1)
+  const pagesCount = Math.ceil(data.length / dataLimit)
+  if (pagesCount === 1) return null
+  const pages = _.range(1, pagesCount + 1)
+
+  // useEffect(() => {
+  //   if (selectedPage !== '') setCurrentPage(selectedPage)
+  // }, [selectedPage])
   function goToNextPage() {
     setSelectedPage(currentPage + 1)
     setCurrentPage((page) => page + 1)
@@ -31,10 +35,10 @@ function Pagination({
     setCurrentPage(pageNumber)
   }
 
-  const getPaginationGroup = () => {
-    let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit
-    return new Array(pageLimit).fill().map((_, idx) => start + idx + 1)
-  }
+  // const getPaginationGroup = () => {
+  //   let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit
+  //   return new Array(pageLimit).fill().map((_, idx) => start + idx + 1)
+  // }
 
   return (
     <div>
@@ -46,7 +50,23 @@ function Pagination({
           >
             Prev
           </button>
-          {getPaginationGroup().map((item, index) => (
+          <nav>
+            <ul className="pagination">
+              {pages.map((page) => (
+                <li
+                  key={page}
+                  className={
+                    page === currentPage ? 'page-item active' : 'page-item'
+                  }
+                >
+                  <a className="page-link" onClick={changePage}>
+                    {page}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          {/* {getPaginationGroup().map((item, index) => (
             <button
               key={index}
               onClick={changePage}
@@ -56,11 +76,11 @@ function Pagination({
             >
               <span>{item}</span>
             </button>
-          ))}
+          ))} */}
           {/* next button */}
           <button
             onClick={goToNextPage}
-            className={`next ${currentPage === pages ? 'disabled' : ''}`}
+            className={`next ${currentPage === pages.length ? 'disabled' : ''}`}
           >
             Next
           </button>
@@ -73,12 +93,6 @@ function Pagination({
 
 Pagination.propTypes = {
   dataLimit: PropTypes.number.isRequired,
-  pageLimit: PropTypes.number.isRequired,
-  data: PropTypes.string.isRequired,
-  setPageState: PropTypes.func.isRequired,
-  selectedPage: PropTypes.number.isRequired,
-  setSelectedPage: PropTypes.func.isRequired,
-  handleSelection: PropTypes.func.isRequired,
 }
 
 export default Pagination

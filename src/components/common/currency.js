@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { currencies } from './commonCurrency';   
-const CurrencySelect = ({ variant }) => {
-    const [currency, setCurrency] = useState({
-        firstCurrency: "Rs",
-        secondCurrency: "Rs"
-    });
-    function selectCurrency(e){
-        const name = e.target.name;
-        const val = e.target.value;
-        setCurrency(prevState => ({ ...prevState, [name]:val }));
-    };
+const CurrencySelect = ({ variant,onChange}) => {
+    // const [currency, setCurrency] = useState(''); 
+    // function selectCurrency1(e){
+    //     const name = e.target.name;
+    //     const val = e.target.value;
+    //     setCurrency(e.target.value)
+    //     //setCurrency(prevState => ({ ...prevState, [name]:val }));
+    // };
     return (
         <div className="form-group">
             <select
                 style={{width: '185px'}}
-                onChange={selectCurrency}
+                onChange={onChange}
                 className="form-control selectpicker"
             >
                 <option disabled="disabled" selected="selected">

@@ -1,43 +1,79 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import Table from './table'
+import Pagination from './Pagination'
+import _ from 'lodash'
 
-const Homepage = ({ data, dataLimit, handleSelection }) => {
+const Homepage = ({
+  data,
+  dataLimit,
+  selectedPage,
+  setSelectedPage,
+  setPageState,
+}) => {
   const columns = [
-    { path: 'item.title', label: 'TicketNo' },
-    { path: 'item.status', label: 'Status' },
-    { path: 'item.sName', label: 'Name' },
-    { path: 'item.sCity', label: 'City' },
-    { path: 'item.sAmount', label: 'Amount' },
-    { path: 'item.sCountry', label: 'Country' },
-    { path: 'item.sReference', label: 'Reference' },
-    { path: 'item.rName', label: 'Name' },
-    { path: 'item.rCity', label: 'City' },
-    { path: 'item.rAmount', label: 'Amount' },
-    { path: 'item.rCountry', label: 'Country' },
-    { path: 'item.name', label: 'Agent' },
+    { path: 'ticketNo', label: 'TicketNo' },
+    { path: 'status', label: 'Status' },
+    { path: 'sName', label: 'Name' },
+    { path: 'sCity', label: 'City' },
+    { path: 'sAmount', label: 'Amount' },
+    { path: 'sCountry', label: 'Country' },
+    { path: 'sReference', label: 'Reference' },
+    { path: 'rName', label: 'Name' },
+    { path: 'rCity', label: 'City' },
+    { path: 'rAmount', label: 'Amount' },
+    { path: 'rCountry', label: 'Country' },
+    { path: 'name', label: 'Agent' },
   ]
+
   //   const [pages] = useState(Math.round(data.length / dataLimit))
   const [currentPage, setCurrentPage] = useState(1)
-
+  const [selectedTxn, setSelectedTxn] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [sortColumn, setColumnData] = useState({
+    path: 'rName',
+    order: 'asc',
+  })
+  function handleSelection(item) {
+    console.log('came to transaction selections..', item)
+    setSelectedTxn(item)
+    setPageState({ isEdit: 1, isAdd: 0, isRequest: 0 })
+  }
   const getPaginatedData = () => {
+    //sort the data based on the column name
+    const sortedData = _.orderBy(data, [sortColumn.path], [sortColumn.order])
+    //paginate data
     const startIndex = currentPage * dataLimit - dataLimit
     const endIndex = startIndex + dataLimit
-    return data.slice(startIndex, endIndex)
+    return sortedData.slice(startIndex, endIndex)
+    //return PaginationData(data, currentPage, datalimit)
+    // const startIndex = (currentPage - 1) * dataLimit
+    // return _(data).slice(startIndex).take(dataLimit).value()
   }
+  const handleSort = (sortColumn) => {
+    setColumnData({ path: sortColumn.path, order: sortColumn.order })
+    //this.setState({ sortColumn })
+  }
+
   return (
     <div>
-      {/* show the posts, 10 posts at a time */}
-      <div className="dataContainer">
-        <Table
-          columns={columns}
+      <div>
+        {/* show the posts, 10 posts at a time */}
+        <div>
+          <Table
+            columns={columns}
+            getPaginatedData={getPaginatedData}
+            handleSelection={handleSelection}
+            sortColumn={sortColumn}
+            onSort={handleSort}
+          />
+        </div>
+        <Pagination
           data={data}
           dataLimit={dataLimit}
+          setSelectedPage={setSelectedPage}
           currentPage={currentPage}
-          getPaginatedData={getPaginatedData}
-          handleSelection={handleSelection}
-          //sortColumn={sortColumn}
-          //onSort={onSort}
+          setCurrentPage={setCurrentPage}
         />
       </div>
     </div>

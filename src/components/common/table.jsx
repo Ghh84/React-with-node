@@ -4,20 +4,15 @@ import TableBody from './tableBody'
 
 const Table = ({
   columns,
-  data,
-  currentPage,
-  dataLimit,
   handleSelection,
   getPaginatedData,
+  sortColumn,
+  onSort,
 }) => {
   return (
     <table className="table">
-      <TableHeader columns={columns} />
+      <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort} />
       <TableBody
-        columns={columns}
-        data={data}
-        currentPage={currentPage}
-        dataLimit={dataLimit}
         handleSelection={handleSelection}
         getPaginatedData={getPaginatedData}
       />

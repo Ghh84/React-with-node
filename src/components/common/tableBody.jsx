@@ -23,6 +23,7 @@ class TableBody extends Component {
             <tr>
               <td
                 className="nameTag"
+                key={index}
                 onClick={() => this.props.handleSelection(item)}
               >
                 {item.ticketNo}

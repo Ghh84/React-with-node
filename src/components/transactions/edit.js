@@ -191,7 +191,7 @@ return(
                                  <Country value={sCountry}/>  
                             <div className="select-dropdown"></div>
                         </div>
-                            </div>
+                    </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">

@@ -12,6 +12,7 @@ import configs from '../../configs/local'
 import AuthService from '../../services/auth.service';
 import Pagination from "../common/Pagination";
 import HomePage from "../common/homepage";
+import { PaginationData } from '../../utils/paginateData';
 
 const Transaction=()=> {
   const [{ isEdit, isAdd,isRequest }, setPageState] = useState({ isEdit: 0, isAdd: 0,isRequest:0 })
@@ -21,13 +22,9 @@ const Transaction=()=> {
   const [txData,settxData]=useState([])
   const [users,setUsers]=useState([])
   const [selectedPage, setSelectedPage] = useState('')
-  const [filteredData,setFilteredData]=useState([])
+ 
 
-function handleSelection(item) {
-    console.log('came to transaction selections..',item)
-    setSelectedTxn(item)
-    setPageState({ isEdit: 1, isAdd: 0,isRequest:0 })
-}
+
 function handleAdd() {
   setPageState({ isEdit: 1, isAdd: 1 ,isRequest:0})
 }
@@ -155,22 +152,28 @@ console.log('user....',users)
           </div>
           </div>
           <div className='log-pagination'>
-        {/* transsaction first page after login  */}
+        {/* transsaction first page after login  
+         and Paginate data
+        */}
+        
+        
         <HomePage 
            data={txData}
-           dataLimit={10}
-           handleSelection={handleSelection}
+           dataLimit={4}
+           pageLimit={4}
+           setSelectedPage={setSelectedPage}
+           setPageState={setPageState}
         />
         {/* adding pagination to the transaction page */}
-        <Pagination
+        {/* <Pagination
                   data={txData}
-                  pageLimit={2}
-                  dataLimit={2}
+                  dataLimit={3}
+                  pageLimit={5}
                   setPageState={setPageState}
                   selectedPage={selectedPage}
                   setSelectedPage={setSelectedPage}
                   handleSelection={handleSelection}
-        /> 
+        />  */}
         </div>
             </div>
             

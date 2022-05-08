@@ -22,6 +22,7 @@ class Country extends Component {
       <form >
             <div style={{width: '185px'}}>
             <Select
+              //onChange={this.props.onChange}
               menuPlacement="auto"
               menuPosition="fixed"
               placeholder={"Select Country"}

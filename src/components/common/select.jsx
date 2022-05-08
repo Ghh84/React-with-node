@@ -7,7 +7,7 @@ const Select = ({ name, label, options, setRole, ...rest }) => {
         class="form-control selectpicker"
         onChange={(e) => setRole(e.target.value)}
       >
-        <option disabled="disabled" selected="selected">
+        <option disabled="disabled" selected="default value">
           {label}
         </option>
         <option> 1</option>
