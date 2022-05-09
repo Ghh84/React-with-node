@@ -1,5 +1,5 @@
-import React from 'react'
-import {Route,Link,Redirect} from 'react-router-dom'
+import React,{useState} from 'react'
+import {Route,NavLink,Redirect} from 'react-router-dom'
 import AuthService from '../services/auth.service';
 	const useAuth=()=>{
 	  const user=localStorage.getItem('user')
@@ -15,6 +15,22 @@ import AuthService from '../services/auth.service';
 	export default function PrivateRoute({component:Component,...rest}){
 	  const auth=useAuth()
 	  console.log('auth...',auth)
+   
+  const [activeStyle,setActiveStyle] = useState({transaction:{ color: '#ff3333' },user:{ color: '' },balance:{ color: '' }});
+    const _handleClick=(value)=> { 
+      if(value==='transaction') {
+        setActiveStyle({})
+        setActiveStyle({transaction:{ color: '#ff3333'}})
+      }  
+      else if(value==='user'){
+        setActiveStyle({})
+        setActiveStyle({user:{ color: '#ff3333'}})
+      }
+      else if(value==='balance'){
+        setActiveStyle({})
+        setActiveStyle({balance:{ color: '#ff3333'}})
+      }
+    }
 	  return (
 		<Route render={()=>
 		auth?
@@ -26,50 +42,57 @@ import AuthService from '../services/auth.service';
 			<nav>
 			   <ul>
 			   <li className="nav-item px-3" key={1}>
-                        <div className="nav-link active">
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Transactions"} className="nav-link">
+                          <NavLink to={"/Transactions"}
+                              className="nav-NavLink"  
+                              style={ activeStyle.transaction } 
+                              onClick={_handleClick.bind(this,'transaction')}>
                             Transactions
-                          </Link>
+                          </NavLink>
+                          
                         </div>
                       </li>
                       {AuthService.getCurrentUser().role==1 &&<>
 					  <li className="nav-item px-3" key={2}>
-                        <div className="nav-link active">
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Users"} className="nav-link">
+                          <NavLink to={"/Users"} className="nav-NavLink" style={ activeStyle.user } 
+                              onClick={_handleClick.bind(this,'user')}>
                             Users
-                          </Link>
+                          </NavLink>
                         </div>
                       </li>
 					  <li className="nav-item px-3" key={3}>
-                        <div className="nav-link active">
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Balance"} className="nav-link">
+                          <NavLink to={"/Balance"} className="nav-NavLink" style={ activeStyle.balance } 
+                              onClick={_handleClick.bind(this,'balance')}>
                             Balance
-                          </Link>
+                          </NavLink>
                         </div>
                       </li>
                       </>
                       }
 					  <li className="nav-item px-2" key={4}>
-                        <div className="nav-link active">
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Logout"} className="nav-link" style={{backgroundColor:'white'}}>
+                          <NavLink to={"/Logout"} className="nav-NavLink" style={ activeStyle.logout } 
+                              onClick={_handleClick.bind(this,'logout')}>
                             LogOut
-                          </Link>
+                          </NavLink>
                         </div>
                       </li>
 			   </ul>
