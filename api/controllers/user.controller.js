@@ -1,13 +1,7 @@
 const _=require('lodash')
-const mysql=require('mysql')
-var connection=mysql.createConnection({
-  host:'localhost',
-  user:'root',
-  password:'hani1984',
-  database:'demodb',
-  port:'3306'
+const DbConnection=require('../db')
 
-})
+var connection=DbConnection
 const sql="SELECT * from  users"
 
 const getUsers = async (req, res) => {

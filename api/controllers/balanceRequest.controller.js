@@ -1,15 +1,8 @@
 
 //import { Alert } from 'react-bootstrap';
 const _=require('lodash')
-const mysql=require('mysql')
-var connection=mysql.createConnection({
-  host:'localhost',
-  user:'root',
-  password:'hani1984',
-  database:'demodb',
-  port:'3306'
-
-})
+const DbConnection=require('../db')
+var connection=DbConnection
 if(!connection._connectCalled ){
   connection.connect();
 }
@@ -55,8 +48,9 @@ const updateBalanceReauest=(req,res)=>{
     console.log(`${key}: ${value}`);
     values.push(value)
   }
+//console.log('values',values)
   connection.query("UPDATE  balancerequest SET status=? where id=?",
-  ['paid',values[2].id],(err,row)=>{
+  ['paid',values[0]],(err,row)=>{
     if(err){
       console.log('error adding to transactions',err)
       res.status(400).send('Error updating the transaction')

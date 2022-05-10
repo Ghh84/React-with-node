@@ -1,17 +1,10 @@
 const _=require('lodash')
-const mysql=require('mysql')
-var connection=mysql.createConnection({
-  host:'localhost',
-  user:'root',
-  password:'hani1984',
-  database:'demoDb',
-  port:'3306'
-
-})
-const sql="SELECT * from  balances"
+const DbConnection=require('../db')
+var connection=DbConnection
+const sql="SELECT * from  balance"
 
 const getBalances = async (req, res) => {
-  console.log("came in users controller...........");
+  console.log("came in balance controller...........");
   connection.query(sql,(err,row)=>{
   if(err){
     console.log('error occured',err)
@@ -33,9 +26,9 @@ const updateBalance = (req, res) => {
     console.log(`${key}: ${value}`);
     values.push(value)
   }
-  console.log('values',values[2])
-  connection.query("UPDATE  balance SET USDbalance=?,comment=? where userId=?",
-  [values[2].Amount,values[2].comment,values[2].userId],(err,row)=>{
+  //console.log('values',values)
+  connection.query("UPDATE  balance SET USDbalance= USDbalance + ?,comment=? where userId=?",
+  [values[2],values.comment,values[1]],(err,row)=>{
     if(err){
       console.log('error adding to transactions',err)
       res.status(400).send('Error updating the transaction')
@@ -45,7 +38,6 @@ const updateBalance = (req, res) => {
       res.status(200).send(row)
     }
   }) 
-  // 
 };
 const addBalance = async (req, res) => {
  

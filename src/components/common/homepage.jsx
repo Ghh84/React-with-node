@@ -24,6 +24,8 @@ const Homepage = ({
     { path: 'rAmount', label: 'Amount' },
     { path: 'rCountry', label: 'Country' },
     { path: 'name', label: 'Agent' },
+    { path: 'createdDate', label: 'createdData' },
+    { path: 'updatedDate', label: 'updatedDate' },
   ]
 
   //   const [pages] = useState(Math.round(data.length / dataLimit))

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import AuthService from '../../services/auth.service'
 
 // columns: array
 // sortColumn: object
@@ -28,13 +29,31 @@ class TableHeader extends Component {
       <thead>
         <tr>
           {this.props.columns.map((column) => (
-            <th
-              className="clickable"
-              key={column.path || column.key}
-              onClick={() => this.raiseSort(column.path)}
-            >
-              {column.label} {this.renderSortIcon(column)}
-            </th>
+            <React.Fragment>
+              {column.label !== 'Agent' &&
+                column.label !== 'createdData' &&
+                column.label !== 'updatedDate' && (
+                  <th
+                    className="clickable"
+                    key={column.path || column.key}
+                    onClick={() => this.raiseSort(column.path)}
+                  >
+                    {column.label} {this.renderSortIcon(column)}
+                  </th>
+                )}
+              {AuthService.getCurrentUser().role === 1 &&
+                (column.label === 'Agent' ||
+                  column.label === 'createdData' ||
+                  column.label === 'updatedDate') && (
+                  <th
+                    className="clickable"
+                    key={column.path || column.key}
+                    onClick={() => this.raiseSort(column.path)}
+                  >
+                    {column.label} {this.renderSortIcon(column)}
+                  </th>
+                )}
+            </React.Fragment>
           ))}
         </tr>
       </thead>

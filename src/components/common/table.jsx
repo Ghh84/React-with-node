@@ -10,7 +10,7 @@ const Table = ({
   onSort,
 }) => {
   return (
-    <table className="table">
+    <table className="table table-bordered">
       <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort} />
       <TableBody
         handleSelection={handleSelection}

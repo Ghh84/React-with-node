@@ -3,7 +3,9 @@
 import React,{useEffect, useState} from 'react'
 import { Button, Alert,Modal } from "react-bootstrap";
 import UserService from '../../services/user.service';
+import BalanceService from '../../services/balance.service'
 import _ from 'lodash'
+import TableHeader from './../common/tableHeader';
 
 const Add=({setPageState})=>{
     return(
@@ -211,27 +213,49 @@ const Edit=({setPageState})=>{
 }
 
 
-const Balance =()=>{
+const Balance =({handleSelection})=>{
     const [userData,setUserData]=useState([])
     const [{ isEdit, isAdd }, setPageState] = useState({ isEdit: 0, isAdd: 0 })
+    const [selectedTxn, setSelectedTxn] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [modalAmt,setModalAmt]=useState(0)
     const [addOrSubtruct,setAddOrSubtruct]=useState('add')
     const [userAmt,setUserAmt]=useState(0)
     const [user,setUser]=useState(1)
+    const [balanceData,setBalanceData]=useState([])
+    const dataLimit=4;
+    const [sortColumn, setColumnData] = useState({
+        path: 'userId',
+        order: 'asc',
+      })
+    const columns = [
+        { path: 'userId', label: 'userId' },
+        { path: 'Name', label: 'Name' },
+        { path: 'UsdBalance', label: 'USD Balance' },
+        { path: 'localBalance', label: 'Local Balance' }]
+
     const gnumber=100000
     const gnumber2=0
     useEffect(()=>{
-        console.log('going to get users')
-         UserService.getUsers().then((res)=>{
+        console.log('going to get balance')
+         BalanceService.getBalances().then((res)=>{
           const response=res.data
           console.log('data fetched....',response)
-          setUserData(response)
+          setBalanceData(response)
          }).catch(err=>{
            console.log(err)
              console.log('error fetching data from users table..........')
          })
+         UserService.getUsers().then((res)=>{
+            const response=res.data
+            console.log('data fetched....',response)
+            setUserData(response)
+           }).catch(err=>{
+             console.log(err)
+               console.log('error fetching data from users table..........')
+           })
       },[])
       function handleUpdate(){
         setShow(false)
@@ -244,7 +268,7 @@ const Balance =()=>{
             balance:updatedBalance,
             userId:user
         }
-        UserService.updateUser(balanceObj).then((res)=>{
+        UserService.updateBalance(balanceObj).then((res)=>{
             console.log(res.data)
             window.location.reload(false)
         }).catch((err)=>{
@@ -259,18 +283,39 @@ const Balance =()=>{
         console.log(addOrSubtruct,userAmt)
         setShow(true)
       }
+      const getPaginatedData = () => {
+        //sort the data based on the column name
+        const sortedData = _.orderBy(balanceData, [sortColumn.path], [sortColumn.order])
+        //paginate data
+        const startIndex = currentPage * dataLimit - dataLimit
+        const endIndex = startIndex + dataLimit
+        return sortedData.slice(startIndex, endIndex)
+        //return PaginationData(data, currentPage, datalimit)
+        // const startIndex = (currentPage - 1) * dataLimit
+        // return _(data).slice(startIndex).take(dataLimit).value()
+      }
+      const handleSort = (sortColumn) => {
+        setColumnData({ path: sortColumn.path, order: sortColumn.order })
+        //this.setState({ sortColumn })
+      }
     return(
-        <div>
-            { !isEdit?
+        <React.Fragment>
+        {/*<div>
+             { !isEdit?
             (<div className='balanceBody'>
                     <div className="cards">
-                    {!_.isEmpty(userData) && userData.map(item=>{
+                    {!_.isEmpty(balanceData) && balanceData.map(item=>{
                        return( 
-                       <div className={`card text-white mb-3 ${parseFloat(item.balance)>0?'bg-success':'bg-danger'}`} style={{maxWidth:'18rem',padding:'0px'}}>
-                        <div class="card-header">{item.name}</div>
+                       <div className={`card text-white mb-3 ${parseFloat(item.USDbalance)>0?'bg-success':'bg-danger'}`} style={{maxWidth:'18rem',padding:'0px'}}>
+                        <div class="card-header">{item.userId} USDbalance</div>
                         <div class="card-body">
+                            <div>
                             <div className='circle'>
-                            <p class="card-text">{parseFloat(item.balance).toLocaleString('en-US')}</p>
+                            <p class="card-text"> {parseFloat(item.USDbalance).toLocaleString('en-US')}</p>
+                            </div>
+                            <div className='circle'>
+                            <p class="card-text"> {parseFloat(item.localBalance).toLocaleString('en-US')}</p>
+                            </div>
                             </div>
                             <div className='card-actions'>
                             <Button variant='primary' onClick={()=>handleModalOpen(item.id,item.balance,'add')}><h1>+</h1></Button>
@@ -279,6 +324,7 @@ const Balance =()=>{
                         </div>
                     </div>)
                     })}
+                    */}
                 <Modal
                     show={show}
                     onHide={handleClose}
@@ -300,13 +346,43 @@ const Balance =()=>{
                     </Modal.Footer>
                 </Modal>
                         
-                    </div>
-                </div>):!isAdd?
-                <Edit setPageState={setPageState}></Edit>:<Add setPageState={setPageState}></Add>
-   
-}   
+                    {/* </div>
+                </div>):!isAdd? 
+                <Edit setPageState={setPageState}></Edit>:<Add setPageState={setPageState}></Add>   
 
-        </div>
+        </div> */}
+        <table className="table" style={{width: '800px',marginTop:'50px', marginLeft:'200px'}}>
+        <thead className="thead-dark">
+            <tr>
+                <th>userId</th>
+                <th scope="col">id</th>
+                <th scope="col">USD Balance</th>
+                <th></th>
+                <th scope="col">Local Balance</th>
+                <th></th>
+            </tr>
+        </thead>
+      <tbody>
+      {!_.isEmpty(balanceData) && balanceData.map(item=>{
+          return(<tr>
+              <td>{item.userId}</td>
+              <td>{item.id}</td>
+              <td>{parseFloat(item.USDbalance)}</td>
+              <td>
+                  <Button className="btn btn-primary btn-sm"  onClick={()=>handleModalOpen(item.id,item.USDbalance,'add')}>+</Button>&nbsp;
+                  <Button className="btn btn-danger btn-sm"  onClick={()=>handleModalOpen(item.id,item.USDbalance,'subtruct')}>-</Button>
+              
+              </td>
+              <td>{parseFloat(item.localBalance)}</td>
+              <td>
+                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.id,item.localBalance,'add')}>+</Button>&nbsp;
+                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.id,item.localBalance,'subtruct')}>-</Button>
+              </td>
+          </tr>
+      )})}
+      </tbody>
+      </table>
+        </React.Fragment>
     )
 }
 

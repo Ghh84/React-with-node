@@ -10,16 +10,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import UserService from '../../services/user.service';
 import configs from '../../configs/local'
 import AuthService from '../../services/auth.service';
-import Pagination from "../common/Pagination";
 import HomePage from "../common/homepage";
-import { PaginationData } from '../../utils/paginateData';
-
 const Transaction=()=> {
   const [{ isEdit, isAdd,isRequest }, setPageState] = useState({ isEdit: 0, isAdd: 0,isRequest:0 })
   const [selectedTxn,setSelectedTxn]=useState([])
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [txData,settxData]=useState([])
+  const [resdata,setData]=useState([])
   const [users,setUsers]=useState([])
   const [selectedPage, setSelectedPage] = useState('')
  
@@ -37,15 +35,17 @@ function handleSeeRequest() {
   //<Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
 }
 function handleSearch(e,property){
+  
   console.log('######',property,e.target.value)
-  const txDataTemp=[...txData]
+  const txDataTemp=[...resdata]
   console.log('######',txDataTemp)
   const result=txDataTemp.filter(object=> {
     console.log(startDate,endDate)
     var date = startDate.getFullYear()+'-'+(startDate.getMonth()+1)+'-'+startDate.getDate();
     //var date2 = object['createdDate'].getFullYear()+'-'+(object['createdDate'].getMonth()+1)+'-'+object['createdDate'].getDate();
     console.log('date tiem...',date,object['createdDate'])
-    return object[property]===e.target.value}
+    //alert(e.target.value)
+    return object[property]==e.target.value}
     )
   settxData(result)
 }
@@ -64,6 +64,7 @@ function handlePageSwitch(){
 useEffect(()=>{
    TransactionService.getAllTransactions().then((res)=>{
     const response=res.data
+    setData(response)
     UserService.getUsers().then((res)=>{
       console.log('response from users',res.data)
       let userResponse=res.data
@@ -75,8 +76,8 @@ useEffect(()=>{
         setUsers(filteredUser)
       }
       else{
-         settxData(response) 
-           setUsers(res.data)} 
+        settxData(response) 
+        setUsers(res.data)} 
   })
   
    }).catch(err=>{
@@ -126,7 +127,7 @@ console.log('user....',users)
           Start Date<DatePicker className='input--style-4' selected={startDate} style={{marginLeft:'0'}} onChange={(Date) => setStartDate(Date)} />
             </div>
             <div>
-          End Date<DatePicker className='input--style-4' selected={endDate} onChange={(Date) => setEndDate(Date)} />
+          End Date<DatePicker className='input--style-4' selected={endDate} onChange={(Date) => setEndDate(Date)} onCalendarClose={(e)=>handleChange(e,'createdDate')}/>
             </div>
             {AuthService.getCurrentUser().role===1 &&
             <div>
@@ -179,7 +180,7 @@ console.log('user....',users)
             
           ):isEdit && !isAdd && isRequest==0?(
         <Edit handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>)
-        :!isEdit && isAdd && isRequest==1?
+        :!isEdit && !isAdd && isRequest==1?
         <Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>:
         <Add handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
         }

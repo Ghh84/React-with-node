@@ -1,18 +1,10 @@
 
-
-const {DbConnection}=require("../db");
 const _=require('lodash')
-const mysql=require('mysql')
 const signin = (req, res) => {
-    console.log('REQUEST.......',req.body)
-    var connection=mysql.createConnection({
-      host:'localhost',
-      user:'root',
-      password:'hani1984',
-      database:'demodb',
-      port:'3306'
-  
-  })
+const DbConnection=require('../db')
+  console.log('REQUEST.......',req.body)
+ 
+  var connection=DbConnection
   if(!connection._connectCalled ){
     connection.connect();
   }

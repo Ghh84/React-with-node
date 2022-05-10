@@ -89,8 +89,8 @@ import AuthService from '../services/auth.service';
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <NavLink to={"/Logout"} className="nav-NavLink" style={ activeStyle.logout } 
-                              onClick={_handleClick.bind(this,'logout')}>
+                          <NavLink to={"/Logout"}  className="font-weight-bold" 
+                              >
                             LogOut
                           </NavLink>
                         </div>

@@ -19,17 +19,45 @@ const Request=({handlePageSwitch,selectedTxn})=>{
     const [Message,setMessage]=useState('')
     const [errored,setErrored]=useState('')
     const [SelectedRequest, setSelectedRequest] = useState([])
+    const [checked, setChecked] = useState(true);
+    let checkedId=[];
         
     function handleSeeRequest(){  
-        BalanceService.updateBalance(SelectedRequest).then(()=>{
-            alert('Approved request balance')
-        })
-        BalanceRequestService.updateBalanceReauest(SelectedRequest).then(()=>{
-            alert('updated status of requested balanced')
-            handlePageSwitch()
+        
+        {SelectedRequest.map((item)=>{
+            
+            if(findArrayElementById(checkedId,item.userId)){
+            }
+            else{
+            BalanceService.updateBalance(item).then(()=>{
+                alert('Approved request balance')
+            })
+            BalanceRequestService.updateBalanceReauest(item).then(()=>{
+                alert('updated status of requested balanced')
+                handlePageSwitch()
+            })
+           }
         })
     }
-
+}
+     function handleChecked({target}){
+        //alert(checked)
+        setChecked(!checked)
+        //alert(checked)
+        if(checked){
+            if(findArrayElementById(checkedId, target.value)){
+                checkedId.push({id:target.value})
+            }
+            else{
+                checkedId.splice({id:target.value});
+            }          
+        }
+     }
+     function findArrayElementById(array, Id) {
+        return array.find((element) => {
+          return element.id===Id;
+        })
+      }
     function handleRequest(){
         const editObject={
             amount:amount,
@@ -97,24 +125,24 @@ const Request=({handlePageSwitch,selectedTxn})=>{
                                  <th scope="col">userId</th>
                                  <th scope="col">Amount</th>
                                  <th scope="col">Currency</th>
-                                 <th scope="col">Additional Information</th>
                                  <th scope="col">Created Date</th>
                                  <th scope="col">Updated Date</th>
                                  <th scope="col">Status</th>
+                                 <th scope="col">Additional Information</th>
                             </tr>
                         </thead>
                         <tbody> 
                     {SelectedRequest.map((item)=>{
                         return(
                         <tr>
-                            <td><input type="checkbox" /></td>
+                            <td><input value={item.id} type="checkbox" defaultChecked={!checked} onChange={handleChecked}/></td>
                             <td>{item.userId}</td>
-                            <Link><td>{item.Amount}</td></Link>
+                            <td>{item.Amount}</td>
                             <td>{item.currency}</td>
-                            <td>{item.comment}</td>
-                            <td>{item.createdDate}</td>
-                            <td>{item.updatedDate}</td>
+                            <td>{item.createdDate.substring(0, 10)}</td>
+                            <td>{item.updatedDate.substring(0, 10)}</td>
                             <td>{item.status}</td>
+                            <td>{item.comment}</td>
                         </tr>                        
                         )})}
                         </tbody> 

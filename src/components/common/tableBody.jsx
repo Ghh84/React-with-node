@@ -73,7 +73,15 @@ class TableBody extends Component {
               <td style={{ backgroundColor: '#B1B6F9' }}>{item.rAmount}</td>
               <td style={{ backgroundColor: '#B1B6F9' }}>{item.rCountry}</td>
               {AuthService.getCurrentUser().role === 1 && (
-                <td style={{ backgroundColor: '#FBFAC6' }}>{item.name}</td>
+                <React.Fragment>
+                  <td style={{ backgroundColor: '#FBFAC6' }}>{item.name}</td>
+                  <td style={{ backgroundColor: '#FBFAC6' }}>
+                    {item.createdDate.substring(0, 10)}
+                  </td>
+                  <td style={{ backgroundColor: '#FBFAC6' }}>
+                    {item.updatedDate.substring(0, 10)}
+                  </td>
+                </React.Fragment>
               )}
             </tr>
           )
