@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
 import AuthService from '../../services/auth.service'
-
-// columns: array
-// sortColumn: object
-// onSort: function
-
 class TableHeader extends Component {
   raiseSort = (path) => {
     const sortColumn = { ...this.props.sortColumn }
@@ -26,7 +21,7 @@ class TableHeader extends Component {
 
   render() {
     return (
-      <thead>
+      <thead className="thead-dark">
         <tr>
           {this.props.columns.map((column) => (
             <React.Fragment>

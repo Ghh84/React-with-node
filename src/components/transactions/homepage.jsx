@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import Table from './table'
-import Pagination from './Pagination'
+import Table from '../common/table'
+import Pagination from '../common/Pagination'
 import _ from 'lodash'
 
 const Homepage = ({
@@ -10,6 +10,7 @@ const Homepage = ({
   selectedPage,
   setSelectedPage,
   setPageState,
+  handlePageSwitch,
 }) => {
   const columns = [
     { path: 'ticketNo', label: 'TicketNo' },
@@ -68,6 +69,7 @@ const Homepage = ({
             handleSelection={handleSelection}
             sortColumn={sortColumn}
             onSort={handleSort}
+            handlePageSwitch={handlePageSwitch}
           />
         </div>
         <Pagination

@@ -6,7 +6,7 @@ var connection=DbConnection
 if(!connection._connectCalled ){
   connection.connect();
 }
-const sql="SELECT * from  balancerequest where status='Pending' ORDER BY createdDate ASC"
+const sql="SELECT * from  balancerequest ORDER BY createdDate ASC"
 
 const getRequest = (req, res) => {
   console.log("I reached Talla")
@@ -44,13 +44,13 @@ const addRequest = (req, res) => {
 };
 const updateBalanceReauest=(req,res)=>{
   let columns=[],values=[]
-  for (const [key, value] of Object.entries(req.body)) {
+  for (const [key, value] of Object.entries(req.body[0])) {
     console.log(`${key}: ${value}`);
     values.push(value)
   }
-//console.log('values',values)
+  console.log('values',values)
   connection.query("UPDATE  balancerequest SET status=? where id=?",
-  ['paid',values[0]],(err,row)=>{
+  [req.body[1],values[0]],(err,row)=>{
     if(err){
       console.log('error adding to transactions',err)
       res.status(400).send('Error updating the transaction')

@@ -10,6 +10,7 @@ import PrivateRoute from './components/privateRoute'
 import PublicRoute from './components/publicRoute'
 import Users from './components/users/users'
 import Balance from './components/balance/balance'
+import Request from './components/Request/request';
 import AuthService from './services/auth.service';
 
 class App extends Component {
@@ -20,6 +21,7 @@ class App extends Component {
           <PrivateRoute component={Transaction} path='/Transactions' exact />
           <PrivateRoute component={Users} path='/Users' exact />
           <PrivateRoute component={Balance} path='/Balance' exact />
+          <PrivateRoute component={Request} path='/Request' exact />
           <PublicRoute component={Login} path='/login' exact/>
           <PublicRoute component={Login} path='/' exact/>
           <PublicRoute component={Logout} path='/Logout' exact/>

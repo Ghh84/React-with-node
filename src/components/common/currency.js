@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { currencies } from './commonCurrency';   
-const CurrencySelect = ({ variant,onChange}) => {
+const CurrencySelect = ({ variant,onChange, required}) => {
     // const [currency, setCurrency] = useState(''); 
     // function selectCurrency1(e){
     //     const name = e.target.name;
@@ -15,7 +15,7 @@ const CurrencySelect = ({ variant,onChange}) => {
                 onChange={onChange}
                 className="form-control selectpicker"
             >
-                <option disabled="disabled" selected="selected">
+                <option disabled="disabled" selected="selected" required>
                     Select currency
                 </option>
                 {Object.keys(currencies).map(item => {

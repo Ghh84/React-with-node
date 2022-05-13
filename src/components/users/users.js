@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import { Button, Alert } from "react-bootstrap";
 import UserService from '../../services/user.service';
+import BalanceService from '../../services/balance.service';
 import SearchBox from '../common/searchBox';
 import Select from '../common/select';
 import Input from '../common/input';
@@ -19,32 +20,47 @@ const Add=({handlePageSwitch})=>{
       const [password,setPassword]=useState('')
       const [role,setRole]=useState(1)
       const [balance,setBalance]=useState(0)
+      const [localBalance,setLocalBalance]=useState(0)
+      const [comment,setComment]=useState('Write any info...')
       const [message,setMessage]=useState('')
       const [succeded,setSucceded]=useState('')
       const [errored,setErrored]=useState('')
       
       function handleAdd(){
-          const obj={name,city,country,phone,email,balance,role,username,password}
+          const userId=phone;
+          const obj={userId,name,city,country,phone,email,balance,role,username,password}
+          const objBalance={phone,balance,localBalance,comment}
           if(obj.name==''||obj.username==''||obj.password=='') setMessage('One or more information is missing!')
           else{
-              
+              alert('I am ...')
+          
               UserService.addUser(obj).then((res)=>{
                   console.log('successfully added',res.data)
                   setErrored('')
                   setSucceded('A new user is successfully added!')
                   setMessage('')
+               
                 }).catch((err)=>{
                     setSucceded('')
                     setErrored('New user creation failed!')
+                    setMessage('')
+                })
+              BalanceService.addBalance(objBalance).then((res)=>{
+                    setErrored('')
+                  setSucceded('A balance for new user is successfully added!')
+                  setMessage('')
+                  }).catch((err)=>{
+                    setSucceded('')
+                    setErrored('Adding balance to new user failed!')
                     setMessage('')
                 })
             }
         }
       
     return(
-        <div className="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+        <div>
         <div className="wrapper wrapper--w680">
-            <div className="card card-4">
+            <div className="card card-2">
                 <div className="card-body">
                     <h2 className="title">User registration Form</h2>
                     {!!message &&
@@ -63,14 +79,14 @@ const Add=({handlePageSwitch})=>{
 
                         <div className="row row-space">
                              <div className="col-2">
-                             <Input name={name} label="Name" required="required" setUsername={setName} error=""/>
+                             <Input name={name} label="Name" required="required" setUsername={setName} value={name} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Name</label>
                                     <input className="input--style-4" type="text" onChange={(e)=>setName(e.target.value)} name="first_name"/>
                                 </div> */}
                             </div>
                             <div className="col-2">
-                            <Input name={city} label="City" required="required" setUsername={setCity} error=""/>
+                            <Input name={city} label="City" required="required" setUsername={setCity} value={city}error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">City</label>
                                     <input className="input--style-4" type="text"  onChange={(e)=>setCity(e.target.value)} name="first_name"/>
@@ -80,7 +96,7 @@ const Add=({handlePageSwitch})=>{
                         <div className="row row-space">
                             <div className="col-2"> 
                             <label className="label" class='required'>Country</label>                             
-                                <Country />                                 
+                                <Country value={country}/>                                 
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Country</label>
                                     <div className="input-group-icon">
@@ -90,7 +106,7 @@ const Add=({handlePageSwitch})=>{
                                 </div> */}
                             </div>
                             <div className="col-2">
-                            <Input name={email} label="Email" required="" setUsername={setEmail} error=""/>
+                            <Input name={email} label="Email" required="" setUsername={setEmail} value={email} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label">Email</label>
                                     <div className="input-group-icon">
@@ -103,14 +119,30 @@ const Add=({handlePageSwitch})=>{
                         </div>
                         <div className="row row-space">
                             <div className="col-2">
-                            <Input name={balance} label="Balance" required="required" setUsername={setBalance} error=""/>
+                            <Input name={balance} label="Balance(usd)" required="required" setUsername={setBalance} value={balance} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Balance</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setBalance(e.target.value)} name="email"/>
                                 </div> */}
                             </div>
                             <div className="col-2">
-                                <Input name={phone} label="Phone" required="required" setUsername={setPhone} error=""/>
+                                <Input name={phone} label="Phone" required="required" setUsername={setPhone} value={phone}error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Phone</label>
+                                    <input className="input--style-4" type="number" onChange={(e)=>setPhone(e.target.value)} name="phone"/>
+                                </div> */}
+                            </div>
+                        </div> 
+                        <div className="row row-space">
+                            <div className="col-2">
+                            <Input name={localBalance} label="Balance(local)" required="" setUsername={setLocalBalance} value={localBalance} error=""/>
+                                {/* <div className="input-group">
+                                    <label className="label" class="required">Balance</label>
+                                    <input className="input--style-4" type="number" onChange={(e)=>setBalance(e.target.value)} name="email"/>
+                                </div> */}
+                            </div>
+                            <div className="col-1">
+                            <textarea className="input--style-4" type="text" style={{minWidth:'200px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Phone</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setPhone(e.target.value)} name="phone"/>
@@ -120,7 +152,7 @@ const Add=({handlePageSwitch})=>{
                         <hr style={{color:'blue',height:'2px'}}/><br/>
                         <div className="row row-space">
                             <div className="col-3" style={{width: '185px'}}>
-                                <Input name={username} label="Username" required="required" setUsername={setUsername} error=""/>
+                                <Input name={username} label="Username" required="required" setUsername={setUsername} value={username} error=""/>
 
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Username</label>
@@ -128,7 +160,7 @@ const Add=({handlePageSwitch})=>{
                                 </div> */}
                             </div>
                             <div style={{width: '185px'}}>
-                                <Input name={password} label="Password" required="required" setUsername={setPassword} error=""/>
+                                <Input name={password} label="Password" required="required"  setUsername={setPassword} value={password} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Password</label>
                                     <input className="input--style-4" type="password"  onChange={(e)=>setPassword(e.target.value)} name="phone"/>

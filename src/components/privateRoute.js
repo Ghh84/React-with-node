@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import {Route,NavLink,Redirect} from 'react-router-dom'
 import AuthService from '../services/auth.service';
+import Balance from './balance/balance';
 	const useAuth=()=>{
 	  const user=localStorage.getItem('user')
       console.log('user........private',user)
@@ -10,13 +11,11 @@ import AuthService from '../services/auth.service';
 	    return false
 	  }
 	}
-	
-
 	export default function PrivateRoute({component:Component,...rest}){
 	  const auth=useAuth()
 	  console.log('auth...',auth)
    
-  const [activeStyle,setActiveStyle] = useState({transaction:{ color: '#ff3333' },user:{ color: '' },balance:{ color: '' }});
+  const [activeStyle,setActiveStyle] = useState({transaction:{ color: '#ff3333' },user:{ color: '' },balance:{ color: '' },request:{ color: '' }});
     const _handleClick=(value)=> { 
       if(value==='transaction') {
         setActiveStyle({})
@@ -30,6 +29,10 @@ import AuthService from '../services/auth.service';
         setActiveStyle({})
         setActiveStyle({balance:{ color: '#ff3333'}})
       }
+      else if(value==='request'){
+        setActiveStyle({})
+        setActiveStyle({request:{ color: '#ff3333'}})
+      }
     }
 	  return (
 		<Route render={()=>
@@ -38,7 +41,6 @@ import AuthService from '../services/auth.service';
 		<div>
 			<div className='navigation'>
 			<header>
-			
 			<nav>
 			   <ul>
 			   <li className="nav-item px-3" key={1}>
@@ -57,7 +59,7 @@ import AuthService from '../services/auth.service';
                         </div>
                       </li>
                       {AuthService.getCurrentUser().role==1 &&<>
-					  <li className="nav-item px-3" key={2}>
+					<li className="nav-item px-3" key={2}>
                         <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
@@ -68,22 +70,48 @@ import AuthService from '../services/auth.service';
                             Users
                           </NavLink>
                         </div>
-                      </li>
-					  <li className="nav-item px-3" key={3}>
+          </li>
+					<li className="nav-item px-3" key={3}>
                         <div className="nav-NavLink active">
-                          <span
+                          {/* <span
                             className="oi oi-home"
                             aria-hidden="true"
-                          ></span>{" "}
+                          ></span>{" "} */}
                           <NavLink to={"/Balance"} className="nav-NavLink" style={ activeStyle.balance } 
                               onClick={_handleClick.bind(this,'balance')}>
                             Balance
                           </NavLink>
                         </div>
-                      </li>
+          </li>
+          <li className="nav-item px-3" key={4}>
+                        <div className="nav-NavLink active">
+                          <span
+                            className="oi oi-home"
+                            aria-hidden="true"
+                          ></span>{" "}
+                          <NavLink to={"/Request"} className="nav-NavLink" style={ activeStyle.request } 
+                              onClick={_handleClick.bind(this,'request')}>
+                            Request
+                          </NavLink>
+                        </div>
+          </li>
                       </>
                       }
-					  <li className="nav-item px-2" key={4}>
+              {AuthService.getCurrentUser().role!=1 &&
+                      <li className="nav-item px-3" key={4}>
+                      <div className="nav-NavLink active">
+                        <span
+                          className="oi oi-home"
+                          aria-hidden="true"
+                        ></span>{" "}
+                        <NavLink to={"/Request"} className="nav-NavLink" style={ activeStyle.request } 
+                            onClick={_handleClick.bind(this,'request')}>
+                          Request Balance
+                        </NavLink>
+                      </div>
+                    </li>
+              }
+					  <li className="nav-item px-2" key={5}>
                         <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
@@ -105,6 +133,4 @@ import AuthService from '../services/auth.service';
 	  />
 	  ) 
 	}
-	
-
 	//export default PrivateRoute;

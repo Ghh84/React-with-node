@@ -2,7 +2,7 @@
 import React,{useEffect, useState,useRef} from 'react'
 import Add from './add';
 import Edit from './edit'
-import Request from "./request";
+import Request from "../Request/request";
 import { Button, Alert,Glyphicon } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import DatePicker from "react-datepicker";
@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import UserService from '../../services/user.service';
 import configs from '../../configs/local'
 import AuthService from '../../services/auth.service';
-import HomePage from "../common/homepage";
+import HomePage from "./homepage";
 const Transaction=()=> {
   const [{ isEdit, isAdd,isRequest }, setPageState] = useState({ isEdit: 0, isAdd: 0,isRequest:0 })
   const [selectedTxn,setSelectedTxn]=useState([])
@@ -147,9 +147,9 @@ console.log('user....',users)
           <div className="col-9">
           <div className="row-9"><span>&nbsp;&nbsp;</span></div>
           {/* adding agent request Button */}
-          {AuthService.getCurrentUser().role!==1 &&
-            <Button variant='primary'  style={{marginBottom:'5px',maxHeight:'40px'}} onClick={()=>handleRequest()}>Request Balance</Button>
-          }
+          {/* {AuthService.getCurrentUser().role!==1 &&
+            //<Button variant='primary'  style={{marginBottom:'5px',maxHeight:'40px'}} onClick={()=>handleRequest()}>Request Balance</Button>
+          } */}
           </div>
           </div>
           <div className='log-pagination'>
@@ -164,6 +164,7 @@ console.log('user....',users)
            pageLimit={4}
            setSelectedPage={setSelectedPage}
            setPageState={setPageState}
+           handlePageSwitch={handlePageSwitch}
         />
         {/* adding pagination to the transaction page */}
         {/* <Pagination
