@@ -3,14 +3,15 @@ import React,{useEffect, useState,useRef} from 'react'
 import Add from './add';
 import Edit from './edit'
 import Request from "../Request/request";
-import { Button, Alert,Glyphicon } from "react-bootstrap";
+//import { Button, Alert,Glyphicon } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import UserService from '../../services/user.service';
 import configs from '../../configs/local'
 import AuthService from '../../services/auth.service';
-import HomePage from "./homepage";
+import TransactionTable from "./transactionTable";
+import Button from '../common/button';
 const Transaction=()=> {
   const [{ isEdit, isAdd,isRequest }, setPageState] = useState({ isEdit: 0, isAdd: 0,isRequest:0 })
   const [selectedTxn,setSelectedTxn]=useState([])
@@ -55,6 +56,7 @@ function handleChange(e,property){
   if(property=='status') setFstatus(e.target.value)
   if(property=='country') setFcountry(e.target.value) */
  // if(property=='status') setFstatus(e.target.value)
+ alert(e.target.value)
  handleSearch(e,property)
 }
 function handlePageSwitch(){
@@ -92,8 +94,10 @@ console.log('user....',users)
           {!isEdit && !isAdd && isRequest==0?(
             <div>
               <div className='search-row'>
-              <div className="row-9"><span>&nbsp;&nbsp;</span></div>
+              <div className="row-9"><span>&nbsp;&nbsp;&nbsp;</span>
               <img src='../../refresh.jpg' style={{height:'55px',width:'55px',borderRadius:'15px',marginTop:'-10px'}} alt='refresh' onClick={()=>window.location.reload(false)}></img>
+              </div>
+              <div>
               {AuthService.getCurrentUser().role===1 &&
               <select class='form-control selectpicker' style={{marginTop:'25px'}} onChange={(e)=>handleChange(e,'userId')}>
                                 <option disabled="disabled" selected="selected">select agent</option>
@@ -101,56 +105,63 @@ console.log('user....',users)
                                        return <option value={item.id}>{item.name}</option>
                                 })}
                             </select>
-          }
+               }
           <select class="form-control selectpicker" style={{marginTop:'25px'}} onChange={(e)=>handleChange(e,'status')}>
           <option disabled="disabled" selected="selected">select status</option>
           {configs.statuses.map((s,index)=>{
                                        return <option value={s}>{s}</option>
                                 })}
           </select>
-         
-          {/* <select class="form-control selectpicker" onChange={(e)=>handleChange(e,'sCountry')}>
+          </div>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <div className="row-9"><span>&nbsp;&nbsp;</span>
+          <select class="form-control selectpicker" onChange={(e)=>handleChange(e,'sCountry')}>
           <option disabled="disabled" selected="selected">Sender Country</option>
           {configs.countries.map((c,index)=>{
                                        return <option value={c}>{c}</option>
                                 })}
-          </select> */}
-          {/* <select class="form-control selectpicker" onChange={(e)=>handleChange(e,'rCountry')}>
+          </select> 
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <select class="form-control selectpicker" onChange={(e)=>handleChange(e,'rCountry')}>
           <option disabled="disabled" selected="selected">Receiver Country</option>
           {configs.countries.map((c,index)=>{
                                        return <option value={c}>{c}</option>
                                 })}
-          </select> */}
-         
+          </select>
+          </div>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <div className='datepickercss'>
             <div>
-          Start Date<DatePicker className='input--style-4' selected={startDate} style={{marginLeft:'0'}} onChange={(Date) => setStartDate(Date)} />
+          Start Date: <DatePicker className='input--style-4' selected={startDate} style={{marginLeft:'0'}} onChange={(Date) => setStartDate(Date)} />
             </div>
             <div>
-          End Date<DatePicker className='input--style-4' selected={endDate} onChange={(Date) => setEndDate(Date)} onCalendarClose={(e)=>handleChange(e,'createdDate')}/>
+          End Date: <DatePicker className='input--style-4' selected={endDate} onChange={(Date) => setEndDate(Date)}/>
             </div>
-            {AuthService.getCurrentUser().role===1 &&
-            <div>
-            <Button variant='primary'  style={{marginBottom:'5px',marginTop:'25px',maxHeight:'20px'}} onClick={()=>handleAdd()}>Add New</Button>
-           </div>
-                }
-            {AuthService.getCurrentUser().role===1 &&
+            
+            {/* {AuthService.getCurrentUser().role===1 &&
            <div>
             <Button variant='primary'  style={{marginBottom:'5px',marginTop:'25px',minWidth:'150px',maxHeight:'20px'}} onClick={()=>handleSeeRequest()}>See your request</Button> 
           </div>
-            }
+            } */}
      
           </div>
+          <div><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          {AuthService.getCurrentUser().role===1 &&
+            <div>
+            <Button label='Add New Transaction' handleAdd={handleAdd}/>
+           </div>
+                }
           {AuthService.getCurrentUser().role!==1 &&
            <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'> Balance:<p class="balanceNumber">{!!users[0]?parseFloat(users[0].balance).toLocaleString('en-US'):''}</p></div>
           }
-          <div className="col-9">
-          <div className="row-9"><span>&nbsp;&nbsp;</span></div>
-          {/* adding agent request Button */}
-          {/* {AuthService.getCurrentUser().role!==1 &&
-            //<Button variant='primary'  style={{marginBottom:'5px',maxHeight:'40px'}} onClick={()=>handleRequest()}>Request Balance</Button>
-          } */}
           </div>
+          {/*<div className="col-9">
+           <div className="row-9"><span>&nbsp;&nbsp;</span></div>
+          
+          {AuthService.getCurrentUser().role!==1 &&
+            <Button variant='primary'  style={{marginBottom:'5px',maxHeight:'40px'}} onClick={()=>handleRequest()}>Request Balance</Button>
+          }
+          </div> */}
           </div>
           <div className='log-pagination'>
         {/* transsaction first page after login  
@@ -158,7 +169,7 @@ console.log('user....',users)
         */}
         
         
-        <HomePage 
+        <TransactionTable 
            data={txData}
            dataLimit={4}
            pageLimit={4}

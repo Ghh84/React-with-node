@@ -6,6 +6,7 @@ import SearchBox from '../common/searchBox';
 import Select from '../common/select';
 import Input from '../common/input';
 import Country from '../common/country';
+import configs from '../../configs/local'
 
 
 
@@ -28,32 +29,34 @@ const Add=({handlePageSwitch})=>{
       
       function handleAdd(){
           const userId=phone;
-          const obj={userId,name,city,country,phone,email,balance,role,username,password}
+          const obj={name,city,country,phone,email,role,username,password}
           const objBalance={phone,balance,localBalance,comment}
           if(obj.name==''||obj.username==''||obj.password=='') setMessage('One or more information is missing!')
           else{
               alert('I am ...')
-          
-              UserService.addUser(obj).then((res)=>{
-                  console.log('successfully added',res.data)
-                  setErrored('')
-                  setSucceded('A new user is successfully added!')
-                  setMessage('')
+          UserService.getAllUser().then((res)=>{
+                  
+          })
+            //   UserService.addUser(obj).then((res)=>{
+            //       console.log('successfully added',res.data)
+            //       setErrored('')
+            //       setSucceded('A new user is successfully added!')
+            //       setMessage('')
                
-                }).catch((err)=>{
-                    setSucceded('')
-                    setErrored('New user creation failed!')
-                    setMessage('')
-                })
-              BalanceService.addBalance(objBalance).then((res)=>{
-                    setErrored('')
-                  setSucceded('A balance for new user is successfully added!')
-                  setMessage('')
-                  }).catch((err)=>{
-                    setSucceded('')
-                    setErrored('Adding balance to new user failed!')
-                    setMessage('')
-                })
+            //     }).catch((err)=>{
+            //         setSucceded('')
+            //         setErrored('New user creation failed!')
+            //         setMessage('')
+            //     })
+            //   BalanceService.addBalance(objBalance).then((res)=>{
+            //         setErrored('')
+            //       setSucceded('A balance for new user is successfully added!')
+            //       setMessage('')
+            //       }).catch((err)=>{
+            //         setSucceded('')
+            //         setErrored('Adding balance to new user failed!')
+            //         setMessage('')
+            //     })
             }
         }
       
@@ -95,15 +98,21 @@ const Add=({handlePageSwitch})=>{
                         </div>
                         <div className="row row-space">
                             <div className="col-2"> 
-                            <label className="label" class='required'>Country</label>                             
+                            {/*<label className="label" class='required'>Country</label>                             
                                 <Country value={country}/>                                 
-                                {/* <div className="input-group">
+                                 <div className="input-group">
                                     <label className="label" class="required">Country</label>
                                     <div className="input-group-icon">
                                         <input className="input--style-4 js-datepicker" onChange={(e)=>setCountry(e.target.value)} type="text" name="birthday"/>
                                         <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                     </div>
                                 </div> */}
+                            <select class="form-control selectpicker"  onChange={(e)=>setCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
                             </div>
                             <div className="col-2">
                             <Input name={email} label="Email" required="" setUsername={setEmail} value={email} error=""/>

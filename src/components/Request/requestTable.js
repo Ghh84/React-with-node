@@ -12,7 +12,7 @@ import Input from "../common/input";
     errored,setAmount, amount,currency, setsCurrency, comment, setComment,handleRequest}) => {
     return (
         <React.Fragment>
-             {AuthService.getCurrentUser().role!==1 &&
+        {AuthService.getCurrentUser().role!==1 &&
        (<div className="card-body" style={{"height" : "25%", "width" : "30%","border": "3px solid black", "padding": "10px","marginLeft":"400px","marginTop":"0px"}}>
            <div className="edit-top">         
            <h2 className="title">Request balance form:</h2>
@@ -26,7 +26,7 @@ import Input from "../common/input";
                <div className="col-4">
                    <Input name='amount' label="Amount" required="required" setUsername={setAmount} error="" value={amount} />
                    <label className="label" required >Currency</label>
-                   <CurrencySelect required='required' name='currency' error="" value={currency} />
+                   <CurrencySelect required='required' name='currency' setUsername={setsCurrency}error="" value={currency} />
                    <label className="label">Comment</label>
                    <textarea className="input--style-4" type="text" style={{minWidth:'300px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
                 </div>               

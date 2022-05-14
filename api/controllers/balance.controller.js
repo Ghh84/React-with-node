@@ -76,7 +76,7 @@ const updateBalanceFromRequest = (req, res) => {
     values.push(value)
   }
   console.log('values',values)
-  if(values[3]=='usd'){
+  if(values[3]=='$'){
     connection.query("UPDATE  balance SET USDbalance=USDbalance+?,comment=? where userId=?",
     [values[2],values[4],values[1]],(err,row)=>{
       if(err){

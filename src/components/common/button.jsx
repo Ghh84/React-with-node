@@ -1,7 +1,11 @@
 import React from 'react'
-const Button = (labal) => {
+const Button = ({ label, handleAdd }) => {
   return (
-    <button disabled={this.validate()} className="btn btn-primary">
+    <button
+      className="btn btn-primary"
+      type="button"
+      onClick={() => handleAdd()}
+    >
       {label}
     </button>
   )

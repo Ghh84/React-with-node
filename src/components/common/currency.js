@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { currencies } from './commonCurrency';   
-const CurrencySelect = ({ variant,onChange, required}) => {
+const CurrencySelect = ({ variant,onChange, required,setUsername}) => {
     // const [currency, setCurrency] = useState(''); 
     // function selectCurrency1(e){
     //     const name = e.target.name;
@@ -12,7 +12,8 @@ const CurrencySelect = ({ variant,onChange, required}) => {
         <div className="form-group">
             <select
                 style={{width: '185px'}}
-                onChange={onChange}
+                //onChange={onChange}
+                onChange={(e) => setUsername(e.target.value)}
                 className="form-control selectpicker"
             >
                 <option disabled="disabled" selected="selected" required>

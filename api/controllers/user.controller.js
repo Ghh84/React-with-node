@@ -64,7 +64,7 @@ const addUser = async (req, res) => {
     console.log(`${key}: ${value}`);
     values.push(value)
   }
-  connection.query("INSERT INTO  users (userId,name,city,country,phone,email,balance,role,username,password) VALUES (?)",[values],(err,row)=>{
+  connection.query("INSERT INTO  users (name,city,country,phone,email,role,username,password) VALUES (?)",[values],(err,row)=>{
     if(err){
       console.log('error adding to users',err)
     }

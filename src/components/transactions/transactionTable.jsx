@@ -4,7 +4,7 @@ import Table from '../common/table'
 import Pagination from '../common/Pagination'
 import _ from 'lodash'
 
-const Homepage = ({
+const TransactionTable = ({
   data,
   dataLimit,
   selectedPage,
@@ -34,8 +34,8 @@ const Homepage = ({
   const [selectedTxn, setSelectedTxn] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [sortColumn, setColumnData] = useState({
-    path: 'rName',
-    order: 'asc',
+    path: 'status',
+    order: 'desc',
   })
   function handleSelection(item) {
     console.log('came to transaction selections..', item)
@@ -84,4 +84,4 @@ const Homepage = ({
   )
 }
 
-export default Homepage
+export default TransactionTable
