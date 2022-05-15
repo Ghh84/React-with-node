@@ -74,21 +74,26 @@ class Input extends Component {
   render() {
     const { name, label, required, setUsername, error, value = '' } = this.props
     return (
-      <div className="input-group">
-        <label className="label" class={required}>
-          {label}
-        </label>
-        <input
-          name={name}
-          value={value}
-          className="input--style-4"
-          type="text"
-          //validate
-          //onMouseLeave={this.handleChange}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-
-        {error && <div className="alert alert-danger">{error}</div>}
+      <div className="col-4">
+        <div className="input-group">
+          <label className="label">
+            {' '}
+            {label}
+            <span class={required}></span>
+          </label>
+          <div className="input-group-icon">
+            <input
+              name={name}
+              value={value}
+              className="form-control"
+              type="text"
+              //validate
+              //onMouseLeave={this.handleChange}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          {error && <div className="alert alert-danger">{error}</div>}
+        </div>
       </div>
     )
   }

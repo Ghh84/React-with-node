@@ -112,7 +112,7 @@ const addBalance = async (req, res) => {
   }
   console.log(values)
   
-  connection.query("INSERT INTO  balance (userId,USDbalance,localBalance,comment) VALUES (?)",[values],(err,row)=>{
+  connection.query("INSERT INTO  balance (userId,USDbalance,localBalance,localCurrency,comment) VALUES (?)",[values],(err,row)=>{
     if(err){
       console.log('error adding to users',err)
     }

@@ -16,10 +16,32 @@ const getUsers = async (req, res) => {
   }
 })
 };
+const getUser = async (req, res) => {
+  console.log("came in users controller...........");
+  connection.query(sql,(err,row)=>{
+  if(err){
+    console.log('error occured',err)
+  }
+  else{
+    console.log('returned records')
+    res.status(200).send(row)
+  }
+})
+};
 
-const getUser = async (req,res) =>{
-  
-}
+// const getUserByName = async (req,res) =>{
+//   console.log("came in users controller...........");
+//   console.log(Object.entries(req.body))
+//   connection.query("SELECT * from  users where name=?",[Object.entries(req.body)],(err,row)=>{
+//   if(err){
+//     console.log('error occured',err)
+//   }
+//   else{
+//     console.log('returned records')
+//     res.status(200).send(row)
+//   }
+// })
+// }
 
 const updateUser = async (req, res) => {
   let values=[]
@@ -80,6 +102,7 @@ const deleteUser = (req, res) => {
 };
 module.exports= {
   updateUser,
+  //getUserByName,
   getUser,
   getUsers,
   addUser,
