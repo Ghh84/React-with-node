@@ -42,9 +42,8 @@ const updateBalance = (req, res) => {
     values.push(value)
   }
   console.log('values',values)
-  if(values[3]=='usd'){
-    connection.query("UPDATE  balance SET USDbalance=?,comment=? where userId=?",
-    [values[1],values[2],values[0]],(err,row)=>{
+  connection.query("UPDATE  balance SET USDbalance=?,localBalance=?,comment=? where userId=?",
+  [values[1],values[2],values[3],values[0]],(err,row)=>{
       if(err){
         console.log('error adding to transactions',err)
         res.status(400).send('Error updating the transaction')
@@ -54,20 +53,8 @@ const updateBalance = (req, res) => {
         res.status(200).send(row)
       }
     }) 
-  }
-  else{
-  connection.query("UPDATE  balance SET localBalance=?,comment=? where userId=?",
-  [values[1],values[2],values[0]],(err,row)=>{
-    if(err){
-      console.log('error adding to transactions',err)
-      res.status(400).send('Error updating the transaction')
-    }
-    else{
-      console.log('returned records',row)
-      res.status(200).send(row)
-    }
-  }) 
-}
+  
+  
 };
 const updateBalanceFromRequest = (req, res) => {
   let columns=[],values=[]
@@ -112,7 +99,7 @@ const addBalance = async (req, res) => {
   }
   console.log(values)
   
-  connection.query("INSERT INTO  balance (userId,USDbalance,localBalance,localCurrency,comment) VALUES (?)",[values],(err,row)=>{
+  connection.query("INSERT INTO  balance (userId,USDbalance,localBalance,comment) VALUES (?)",[values],(err,row)=>{
     if(err){
       console.log('error adding to users',err)
     }

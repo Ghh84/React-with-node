@@ -1093,3 +1093,13 @@ fieldset{
   border: 3px solid green;
   padding: 10px;
 }
+.centerdiv{
+  content: '';
+  position: absolute;
+  float:left;  
+  width:240px; 
+  
+  border-right: 4px solid #bc0be8;
+  top: 0%;
+  bottom: 50%;
+}

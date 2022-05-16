@@ -25,7 +25,7 @@ const Add=({handlePageSwitch})=>{
       const [message,setMessage]=useState('')
       const [succeded,setSucceded]=useState('')
       const [errored,setErrored]=useState('')
-      const [Id,setUserId]=useState('')
+      const [userId,setUserId]=useState('')
       
       function handleAdd(){
           const obj={name,city,country,phone,email,role,username,password}
@@ -46,18 +46,21 @@ const Add=({handlePageSwitch})=>{
             
             alert('I am ...')
             // setTimeout(() => {({timePassed: true})}, 1700);
-            UserService.getUsers().then((res)=>{ 
+          
+            let objBalance={}
+            UserService.getUsers().then((res)=>{
                 const response=res.data
                 let filtered=response.filter((f)=> f.name===name)
                alert(filtered[0].userId)
                 setUserId(filtered[0].userId)
-
-            }).catch((err)=>{
+             objBalance={userId,balance,localBalance,currency,comment}
+            },2000).catch((err)=>{
                 setSucceded('')
                 setErrored('New user creation failed!')
                 setMessage('')
             })
-            const objBalance={Id,balance,localBalance,currency,comment}
+            alert(userId)
+           
             BalanceService.addBalance(objBalance).then((res)=>{
                 setErrored('')
                 setSucceded('A balance for new user is successfully added!')
@@ -213,10 +216,8 @@ const Add=({handlePageSwitch})=>{
                             </div>
                     </div> */}
                       <div className="row row-space">
-                            <div>
-                            <Select class="form-control selectpicker" name={name} label="Choose Role" option='1' setRole={setRole} />
-                            <span>&nbsp;&nbsp;&nbsp;</span>
-                            </div>
+                            <Select class="form-control selectpicker" name={name} label="Choose Role" option='1' setRole={setRole} /> 
+                            <span></span><span></span>                 
                             {/* <Input name={localBalance} label="Balance(local)" required="" setUsername={setLocalBalance} value={localBalance} error=""/> */}
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Balance</label>
@@ -224,11 +225,9 @@ const Add=({handlePageSwitch})=>{
                                 </div> */}
                             <div className="col-3">
                             <div className="input-group">
-                            <label className="label">Comment <span></span></label>
-                           
-                           <div>
-                           <textarea className="input--style-4" type="text" style={{minWidth:'200px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
- 
+                            <label className="label">Comment <span></span></label>                           
+                            <div>
+                            <textarea className="input--style-4" type="text" style={{minWidth:'300px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
                             </div>
                             </div >
                             </div >

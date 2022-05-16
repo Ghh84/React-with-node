@@ -4,8 +4,8 @@ import React,{useEffect, useState} from 'react'
 import { Button, Alert,Modal } from "react-bootstrap";
 import UserService from '../../services/user.service';
 import BalanceService from '../../services/balance.service'
+import Input from '../common/input';
 import _ from 'lodash'
-import TableHeader from './../common/tableHeader';
 
 const Add=({setPageState})=>{
     return(
@@ -220,10 +220,12 @@ const Balance =({handleSelection})=>{
     const [currentPage, setCurrentPage] = useState(1)
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const [modalAmt,setModalAmt]=useState(0)
+    const [modalUsdAmt,setModalUsdAmt]=useState(0)
+    const [modalLocalAmt,setModalLocalAmt]=useState(0)
     const [modalComm,setModalComm]=useState('')
     const [addOrSubtruct,setAddOrSubtruct]=useState('add')
-    const [userAmt,setUserAmt]=useState(0)
+    const [userUsdAmt,setUserUsdAmt]=useState(0)
+    const [userLocalAmt,setUserLocalAmt]=useState(0)
     const [user,setUser]=useState(1)
     const [balanceData,setBalanceData]=useState([])
     const [currency,setCurrency]=useState('')
@@ -261,17 +263,25 @@ const Balance =({handleSelection})=>{
       },[])
       function handleUpdate(){
         setShow(false)
-        console.log(userAmt,addOrSubtruct,modalAmt,user)
-        let updatedBalance=0
+        console.log(userUsdAmt,userLocalAmt,addOrSubtruct,modalUsdAmt,modalLocalAmt,user)
+        alert(addOrSubtruct)
+        let updatedUsdBalance=0
+        let updatedLocalBalance=0
         //if(addOrSubtruct=='add') updatedBalance=!!userAmt?userAmt:0 + parseInt(modalAmt)
-        if(addOrSubtruct==='add') updatedBalance=userAmt + parseInt(modalAmt)
-        else updatedBalance=userAmt - parseInt(modalAmt)
-        console.log('updated amount...',updatedBalance)
+    if(addOrSubtruct==='add') {
+        updatedUsdBalance=userUsdAmt + parseInt(modalUsdAmt)
+        updatedLocalBalance=userLocalAmt + parseInt(modalLocalAmt)
+    }
+        else {
+            updatedUsdBalance=userUsdAmt - parseInt(modalUsdAmt)
+            updatedLocalBalance=userLocalAmt - parseInt(modalLocalAmt)
+        } 
+        console.log('updated amount...',updatedLocalBalance)
         const balanceObj={
             userId:user,
-            balance:updatedBalance,
-            comment:modalComm,
-            currency:currency
+            usdBalance:updatedUsdBalance,
+            localBalance:updatedLocalBalance,
+            comment:modalComm
         }
         BalanceService.updateBalance(balanceObj).then((res)=>{
             console.log(res.data)
@@ -281,12 +291,20 @@ const Balance =({handleSelection})=>{
         })
         
       }
-      function handleModalOpen(userId,uBalance,action,currency){
-        setUserAmt(parseFloat(uBalance))
+      function getUserName(id){
+        return( userData.filter(userId=>id).map(user => {
+            if(user.userId==id) return user.name
+ 
+        }
+           ))
+     }
+      function handleModalOpen(userId,usdAmt,localAmt,action,currency){
+        setUserUsdAmt(parseFloat(usdAmt))
+        setUserLocalAmt(parseFloat(localAmt))
         setUser(userId)
         setAddOrSubtruct(action)
         setCurrency(currency)
-        console.log(addOrSubtruct,userAmt)
+        console.log(addOrSubtruct,userUsdAmt)
         setShow(true)
       }
       const getPaginatedData = () => {
@@ -342,12 +360,42 @@ const Balance =({handleSelection})=>{
                         <Modal.Title>Update Balance</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <label className="label">Amount</label>
-                        <input className="input--style-4" value={modalAmt} type="text" onChange={(e)=>setModalAmt(e.target.value)}/>
-                    <div>
-                        <label className="label">Add reason/comment</label>
-                        <textarea className="input--style-4" value={modalComm} type="text" onChange={(e)=>setModalComm(e.target.value)}/>
-                    </div>
+       
+                        <div className="row">
+                            {/* */}
+                            {/* <diV className="col-6"> */}
+                                {/* <label className="label">Amount</label> */}
+                            <Input  label="Usd Amount"   setUsername={setModalUsdAmt} value={modalUsdAmt} type="text" />
+                            {/* </diV> */}
+                                {/* <input className="input--style-4" value={modalAmt} type="text" onChange={(e)=>setModalAmt(e.target.value)}/> */}
+                                {/* <div className="col-6"> */}
+                            <Input  label="Local Amount"  setUsername={setModalLocalAmt} value={modalLocalAmt} type="text" />
+{/* </div> */}
+                            {/* <label className="label">Amount</label>
+                            <input className="input--style-4" value={modalAmt} type="text" onChange={(e)=>setModalAmt(e.target.value)}/> */}
+                        
+                            
+                            
+                        </div>
+                        {/* <div class="centerdiv"><span></span><span></span></div> */}
+                        <div className="row">
+                            
+                           {/* <label className="label">Local balance </label> */}
+                           {/* <diV className="col-6"> */}
+                           <div className='col-8'>
+                                <label className="label">Add reason/comment</label>
+                           
+                                <textarea className="input--style-4" value={modalComm} type="text" onChange={(e)=>setModalComm(e.target.value)}/>                                                   
+                            </div>
+                            {/* </diV> */}
+                            {/* <div className="col-6">
+                                <label className="label">Add reason/comment</label>
+                                <textarea className="input--style-2" value={modalComm} type="text" onChange={(e)=>setModalComm(e.target.value)}/>
+                            </div> */}
+                        </div>
+            
+
+                       
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
@@ -366,28 +414,27 @@ const Balance =({handleSelection})=>{
         <thead className="thead-dark">
             <tr>
                 <th>userId</th>
-                <th scope="col">id</th>
+                <th scope="col">Name</th>
                 <th scope="col">USD Balance</th>
-                <th></th>
                 <th scope="col">Local Balance</th>
-                <th></th>
+                <th>Edit Balance</th>
             </tr>
         </thead>
       <tbody>
       {!_.isEmpty(balanceData) && balanceData.map(item=>{
           return(<tr>
               <td>{item.userId}</td>
-              <td>{item.id}</td>
+              <td>{getUserName(item.userId)}</td>
               <td>{parseFloat(item.USDbalance)}</td>
-              <td>
+              {/* <td>
                   <Button className="btn btn-primary btn-sm"  onClick={()=>handleModalOpen(item.userId,item.USDbalance,'add','usd')}>+</Button>&nbsp;
                   <Button className="btn btn-danger btn-sm"  onClick={()=>handleModalOpen(item.userId,item.USDbalance,'subtruct','usd')}>-</Button>
               
-              </td>
+              </td> */}
               <td>{parseFloat(item.localBalance)}</td>
               <td>
-                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.userId,item.localBalance,'add','local')}>+</Button>&nbsp;
-                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.userId,item.localBalance,'subtruct','local')}>-</Button>
+                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.userId,item.USDbalance,item.localBalance,'add','local')}>+</Button>&nbsp;
+                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.userId,item.USDbalance,item.localBalance,'subtruct','local')}>-</Button>
               </td>
           </tr>
       )})}

@@ -74,7 +74,7 @@ class Input extends Component {
   render() {
     const { name, label, required, setUsername, error, value = '' } = this.props
     return (
-      <div className="col-4">
+      <div className="col-6">
         <div className="input-group">
           <label className="label">
             {' '}
