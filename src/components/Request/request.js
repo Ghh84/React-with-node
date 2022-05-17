@@ -84,7 +84,7 @@ const Request=({handlePageSwitch,selectedTxn})=>{
         BalanceRequestService.addRequest(editObject).then((res)=>{
             setMessage('Transaction was successfully updated');
             setErrored('')
-           
+            alert(res)
         }).catch((err)=>{
             setMessage('')
             setErrored('Transaction update failed')

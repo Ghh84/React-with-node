@@ -23,7 +23,7 @@ import Input from "../common/input";
            {errored &&
                        <Alert variant='danger'>{errored}</Alert>}
            <form method="POST">
-               <div className="col-4">
+               <div className="col-10">
                    <Input name='amount' label="Amount" required="required" setUsername={setAmount} error="" value={amount} />
                    <label className="label" required >Currency</label>
                    <CurrencySelect required='required' name='currency' setUsername={setsCurrency}error="" value={currency} />

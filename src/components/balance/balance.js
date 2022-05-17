@@ -5,6 +5,7 @@ import { Button, Alert,Modal } from "react-bootstrap";
 import UserService from '../../services/user.service';
 import BalanceService from '../../services/balance.service'
 import Input from '../common/input';
+import Pagination from '../common/Pagination';
 import _ from 'lodash'
 
 const Add=({setPageState})=>{
@@ -217,19 +218,24 @@ const Balance =({handleSelection})=>{
     const [userData,setUserData]=useState([])
     const [{ isEdit, isAdd }, setPageState] = useState({ isEdit: 0, isAdd: 0 })
     const [selectedTxn, setSelectedTxn] = useState([])
-    const [currentPage, setCurrentPage] = useState(1)
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const [modalUsdAmt,setModalUsdAmt]=useState(0)
     const [modalLocalAmt,setModalLocalAmt]=useState(0)
+    const [modalAdminUsdAmt,setModalAdminUsdAmt]=useState(0)
+    const [modalAdminLocalAmt,setModalAdminLocalAmt]=useState(0)
     const [modalComm,setModalComm]=useState('')
     const [addOrSubtruct,setAddOrSubtruct]=useState('add')
     const [userUsdAmt,setUserUsdAmt]=useState(0)
     const [userLocalAmt,setUserLocalAmt]=useState(0)
+    const [userAdminUsdAmt,setUserAdminUsdAmt]=useState(0)
+    const [userAdminLocalAmt,setUserAdminLocalAmt]=useState(0)
     const [user,setUser]=useState(1)
     const [balanceData,setBalanceData]=useState([])
     const [currency,setCurrency]=useState('')
-    const dataLimit=4;
+    const [selectedPage, setSelectedPage] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
+    const dataLimit=2;
     const [sortColumn, setColumnData] = useState({
         path: 'userId',
         order: 'asc',
@@ -267,20 +273,28 @@ const Balance =({handleSelection})=>{
         alert(addOrSubtruct)
         let updatedUsdBalance=0
         let updatedLocalBalance=0
+        let updatedAdminUsdBalance=0
+        let updatedAdminLocalBalance=0
         //if(addOrSubtruct=='add') updatedBalance=!!userAmt?userAmt:0 + parseInt(modalAmt)
     if(addOrSubtruct==='add') {
         updatedUsdBalance=userUsdAmt + parseInt(modalUsdAmt)
         updatedLocalBalance=userLocalAmt + parseInt(modalLocalAmt)
+        updatedAdminUsdBalance=userAdminUsdAmt + parseInt(modalAdminUsdAmt)
+        updatedAdminLocalBalance=userAdminLocalAmt + parseInt(modalAdminLocalAmt)
     }
         else {
             updatedUsdBalance=userUsdAmt - parseInt(modalUsdAmt)
             updatedLocalBalance=userLocalAmt - parseInt(modalLocalAmt)
+            updatedAdminUsdBalance=userAdminUsdAmt - parseInt(modalAdminUsdAmt)
+            updatedAdminLocalBalance=userAdminLocalAmt - parseInt(modalAdminLocalAmt)
         } 
         console.log('updated amount...',updatedLocalBalance)
         const balanceObj={
             userId:user,
             usdBalance:updatedUsdBalance,
             localBalance:updatedLocalBalance,
+            adminUsdBalance:updatedAdminUsdBalance,
+            adminLocalBalance:updatedAdminLocalBalance,
             comment:modalComm
         }
         BalanceService.updateBalance(balanceObj).then((res)=>{
@@ -298,9 +312,11 @@ const Balance =({handleSelection})=>{
         }
            ))
      }
-      function handleModalOpen(userId,usdAmt,localAmt,action,currency){
+      function handleModalOpen(userId,usdAdminAmt,localAdminAmt,usdAmt,localAmt,action,currency){
         setUserUsdAmt(parseFloat(usdAmt))
         setUserLocalAmt(parseFloat(localAmt))
+        setUserAdminUsdAmt(parseFloat(usdAdminAmt))
+        setUserAdminLocalAmt(parseFloat(localAdminAmt))
         setUser(userId)
         setAddOrSubtruct(action)
         setCurrency(currency)
@@ -360,42 +376,24 @@ const Balance =({handleSelection})=>{
                         <Modal.Title>Update Balance</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-       
+                        <div className="row"><p>Admin balance update form</p></div>
                         <div className="row">
-                            {/* */}
-                            {/* <diV className="col-6"> */}
-                                {/* <label className="label">Amount</label> */}
-                            <Input  label="Usd Amount"   setUsername={setModalUsdAmt} value={modalUsdAmt} type="text" />
-                            {/* </diV> */}
-                                {/* <input className="input--style-4" value={modalAmt} type="text" onChange={(e)=>setModalAmt(e.target.value)}/> */}
-                                {/* <div className="col-6"> */}
-                            <Input  label="Local Amount"  setUsername={setModalLocalAmt} value={modalLocalAmt} type="text" />
-{/* </div> */}
-                            {/* <label className="label">Amount</label>
-                            <input className="input--style-4" value={modalAmt} type="text" onChange={(e)=>setModalAmt(e.target.value)}/> */}
-                        
-                            
-                            
+                            <Input  label="Admin Usd Amount"   setUsername={setModalAdminUsdAmt} value={modalAdminUsdAmt} type="text" />
+                            <Input  label="Admin Local Amount"  setUsername={setModalAdminLocalAmt} value={modalAdminLocalAmt} type="text" />
                         </div>
-                        {/* <div class="centerdiv"><span></span><span></span></div> */}
+                        <hr style={{color:'blue',height:'2px'}}/><br/>
+                        <div className="row"><p>User balance update form</p></div>
                         <div className="row">
-                            
-                           {/* <label className="label">Local balance </label> */}
-                           {/* <diV className="col-6"> */}
+                            <Input  label="User Usd Amount"   setUsername={setModalUsdAmt} value={modalUsdAmt} type="text" />
+                            <Input  label="User Local Amount"  setUsername={setModalLocalAmt} value={modalLocalAmt} type="text" />
+                        </div>
+                        <div className="row">
                            <div className='col-8'>
                                 <label className="label">Add reason/comment</label>
-                           
                                 <textarea className="input--style-4" value={modalComm} type="text" onChange={(e)=>setModalComm(e.target.value)}/>                                                   
                             </div>
-                            {/* </diV> */}
-                            {/* <div className="col-6">
-                                <label className="label">Add reason/comment</label>
-                                <textarea className="input--style-2" value={modalComm} type="text" onChange={(e)=>setModalComm(e.target.value)}/>
-                            </div> */}
                         </div>
             
-
-                       
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
@@ -413,33 +411,50 @@ const Balance =({handleSelection})=>{
         <table className="table" style={{width: '800px',marginTop:'50px', marginLeft:'200px'}}>
         <thead className="thead-dark">
             <tr>
-                <th>userId</th>
-                <th scope="col">Name</th>
-                <th scope="col">USD Balance</th>
-                <th scope="col">Local Balance</th>
-                <th>Edit Balance</th>
+                <th rowSpan={2}>userId</th>
+                <th rowSpan={2}>Name</th>
+                <th colSpan={2}>Admin balance</th>
+                <th colSpan={2}>User balance</th>
+                <th rowSpan={2}>Edit Balance</th>
+            </tr>
+            <tr>
+               
+                <th >USD </th>
+                <th >Local </th>
+                <th >USD </th>
+                <th >Local </th>
+                
             </tr>
         </thead>
       <tbody>
-      {!_.isEmpty(balanceData) && balanceData.map(item=>{
+      {!_.isEmpty(balanceData) && getPaginatedData().map(item=>{
           return(<tr>
               <td>{item.userId}</td>
               <td>{getUserName(item.userId)}</td>
-              <td>{parseFloat(item.USDbalance)}</td>
+              <td>{parseFloat(item.adminUSD)}</td>
               {/* <td>
                   <Button className="btn btn-primary btn-sm"  onClick={()=>handleModalOpen(item.userId,item.USDbalance,'add','usd')}>+</Button>&nbsp;
                   <Button className="btn btn-danger btn-sm"  onClick={()=>handleModalOpen(item.userId,item.USDbalance,'subtruct','usd')}>-</Button>
               
               </td> */}
-              <td>{parseFloat(item.localBalance)}</td>
+              <td>{parseFloat(item.adminLocal)}</td>              
+              <td>{parseFloat(item.USDbalance)}</td>
+              <td>{parseFloat(item.USDbalance)}</td>
               <td>
-                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.userId,item.USDbalance,item.localBalance,'add','local')}>+</Button>&nbsp;
-                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.userId,item.USDbalance,item.localBalance,'subtruct','local')}>-</Button>
+                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.userId,item.adminUSD,item.adminLocal,item.USDbalance,item.localBalance,'add','local')}>+</Button>&nbsp;
+                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.userId,item.adminUSD,item.adminLocal,item.USDbalance,item.localBalance,'subtruct','local')}>-</Button>
               </td>
           </tr>
       )})}
       </tbody>
       </table>
+      <Pagination
+          data={balanceData}
+          dataLimit={dataLimit}
+          setSelectedPage={setSelectedPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
         </React.Fragment>
     )
 }

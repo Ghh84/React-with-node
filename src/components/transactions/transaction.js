@@ -12,6 +12,8 @@ import configs from '../../configs/local'
 import AuthService from '../../services/auth.service';
 import TransactionTable from "./transactionTable";
 import Button from '../common/button';
+import BalanceService from '../../services/balance.service';
+
 const Transaction=()=> {
   const [{ isEdit, isAdd,isRequest }, setPageState] = useState({ isEdit: 0, isAdd: 0,isRequest:0 })
   const [selectedTxn,setSelectedTxn]=useState([])
@@ -20,6 +22,8 @@ const Transaction=()=> {
   const [txData,settxData]=useState([])
   const [resdata,setData]=useState([])
   const [users,setUsers]=useState([])
+  const [usdBalance,setUsdBalance]=useState(0)
+  const [localBalance,setLocalBalance]=useState(0)
   const [selectedPage, setSelectedPage] = useState('')
  
 
@@ -56,7 +60,7 @@ function handleChange(e,property){
   if(property=='status') setFstatus(e.target.value)
   if(property=='country') setFcountry(e.target.value) */
  // if(property=='status') setFstatus(e.target.value)
- alert(e.target.value)
+
  handleSearch(e,property)
 }
 function handlePageSwitch(){
@@ -72,7 +76,8 @@ useEffect(()=>{
       let userResponse=res.data
       if(AuthService.getCurrentUser().role!==1){
         //filter transaction data based on agent
-        let filtered=response.filter((f)=> f.userId===AuthService.getCurrentUser().id)
+        let filtered=resdata.filter((f=>f.userId==AuthService.getCurrentUser().id))
+   
         let filteredUser=userResponse.filter((u)=>u.id===AuthService.getCurrentUser().id)  
         settxData(filtered)
         setUsers(filteredUser)
@@ -87,6 +92,17 @@ useEffect(()=>{
        console.log('error fetching data from transaction table..........')
        
    })
+   users.map(e=>{
+   BalanceService.getBalances().then((res)=>{
+    res.data.map(user => {
+      if(user.userId==e.userId){
+        setUsdBalance(user.USDbalance)
+        setLocalBalance(user.localBalance)
+      }
+     })
+     })
+   })
+ 
 },[])
 console.log('user....',users)
   return(
@@ -145,14 +161,22 @@ console.log('user....',users)
             } */}
      
           </div>
-          <div><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <div>
           {AuthService.getCurrentUser().role===1 &&
             <div>
             <Button label='Add New Transaction' handleAdd={handleAdd}/>
            </div>
                 }
           {AuthService.getCurrentUser().role!==1 &&
-           <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'> Balance:<p class="balanceNumber">{!!users[0]?parseFloat(users[0].balance).toLocaleString('en-US'):''}</p></div>
+              <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'>Usd Balance:<p class="balanceNumber">{!!users[0]?parseFloat(usdBalance).toLocaleString('en-US'):''}</p></div>        
+          }
+          
+
+          </div>
+          {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+          <div>
+          {AuthService.getCurrentUser().role!==1 &&
+          <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'>local Balance:<p class="balanceNumber">{!!users[0]?parseFloat(localBalance).toLocaleString('en-US'):''}</p></div>
           }
           </div>
           {/*<div className="col-9">
