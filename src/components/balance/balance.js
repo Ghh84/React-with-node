@@ -408,7 +408,7 @@ const Balance =({handleSelection})=>{
                 <Edit setPageState={setPageState}></Edit>:<Add setPageState={setPageState}></Add>   
 
         </div> */}
-        <table className="table" style={{width: '800px',marginTop:'50px', marginLeft:'200px'}}>
+        <table className="table" style={{width: '800px',marginTop:'50px', marginLeft:'350px'}}>
         <thead className="thead-dark">
             <tr>
                 <th rowSpan={2}>userId</th>

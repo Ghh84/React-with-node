@@ -7,13 +7,13 @@ import UserService from '../../services/user.service';
 import AuthService from '../../services/auth.service'
 import BalanceService from "../../services/balance.service";
 import Pagination from "../common/Pagination";
-import RequestTable from "./requestTable";
+import RequestTable from './requestTable';
 
 const Request=({handlePageSwitch,selectedTxn})=>{
     console.log('selected request.........',selectedTxn)
-    const [amount,setAmount]=useState()
-    const [currency,setsCurrency]=useState()
-    const [comment,setComment]=useState()
+    const [amount,setAmount]=useState('0')
+    const [currency,setsCurrency]=useState('NKF')
+    const [comment,setComment]=useState('')
     const [users,setUsers]=useState([])    
     const [userId,setUserId]=useState()
     const [Message,setMessage]=useState('')
@@ -21,7 +21,7 @@ const Request=({handlePageSwitch,selectedTxn})=>{
     const [SelectedRequest, setSelectedRequest] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedPage, setSelectedPage] = useState('')
-    const dataLimit=6
+    const dataLimit=4
     const [sortColumn, setColumnData] = useState({
         path: 'createdDate',
         order: 'asc',
@@ -79,17 +79,19 @@ const Request=({handlePageSwitch,selectedTxn})=>{
             userId:AuthService.getCurrentUser().id,
             comment:comment
         }
+        
         //validate data before sending
-    
+        alert(amount)
         BalanceRequestService.addRequest(editObject).then((res)=>{
+            
             setMessage('Transaction was successfully updated');
             setErrored('')
-            alert(res)
         }).catch((err)=>{
             setMessage('')
             setErrored('Transaction update failed')
         })
-    }    
+    }   
+     
     useEffect(()=>{
         UserService.getUsers().then((res)=>{
             console.log('at response from users',res.data)
@@ -125,6 +127,7 @@ const Request=({handlePageSwitch,selectedTxn})=>{
                comment={comment}
                setComment={setComment}
            />
+          
            <Pagination
                 data={SelectedRequest}
                 dataLimit={dataLimit}

@@ -40,7 +40,7 @@ const editTransaction = (req, res) => {
     console.log(`${key}: ${value}`);
     values.push(value)
   }
-  console.log('values',values[16])
+  console.log('values',values)
   connection.query("UPDATE  transactions SET sName=?,sCity=?,sAmount=?,sCountry=?,sCurrency=?,sPhone=?,sEmail=?,rName=?,rCity=?,rAmount=?,rCountry=?,rCurrency=?,rPhone=?,rEmail=?,userId=?,referenceP=?,status=?,comment=? where ticketNo=?",
   [values[0],values[1],values[2],values[3],values[4],values[5],values[6],values[7],values[8],values[9],values[10],values[11],values[12],values[13],values[14],values[15],
   values[16],values[17],values[18]],(err,row)=>{

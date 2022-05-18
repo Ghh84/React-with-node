@@ -17,6 +17,7 @@ const Edit=({handlePageSwitch,selectedTxn})=>{
       const [sCurrency,setsCurrency]=useState(selectedTxn.sCurrency)
       const [sPhone,setsPhone]=useState(selectedTxn.sPhone)
       const [sEmail,setsEmail]=useState(selectedTxn.sEmail)
+      const [sPlacehold,setsPlaceholder]=useState(selectedTxn.sPlacehold)
       const [rName,setrName]=useState(selectedTxn.rName)
       const [rCity,setrCity]=useState(selectedTxn.rCity)
       const [rAmount,setrAmount]=useState(selectedTxn.rAmount)
@@ -117,7 +118,9 @@ const Edit=({handlePageSwitch,selectedTxn})=>{
           };
         
         //validate data before sending
+        
         TransactionService.editTransaction(editObject).then((res)=>{
+            alert(editObject.sAmount)
             //update user balance
             let updatedBalance=0
             let currentUser=users.filter(u=>u.id==userId)
@@ -170,86 +173,68 @@ return(
                 <form method="POST">
                 <h4 className="sub-title"> Sender Details:</h4>
                     <div className="row row-space">
-                        <div className="col-2">
                         <Input name={sName} label="Name" required="required" setUsername={setsName} error="" value={sName}/>
-                        </div>
-                        <div className="col-2">
-                             <Input name={sCity} label="City" required="required" setUsername={setsCity} error="" value={sCity}/>
-                        </div>
-                        <div className="col-2">
-                            <Input name='sPhone' label="Phone" required="required" setUsername={setsPhone} error="" value={sPhone}/>
-                        </div>
-                        <div className="col-2">
-                            <Input name={sAmount} label="Amount" required="required" setUsername={setsAmount} error="" value={sAmount}/>
-                        </div>
+                        <Input name={sCity} label="City" required="required" setUsername={setsCity} error="" value={sCity}/>
+                        <Input name='sPhone' label="Phone" required="required" setUsername={setsPhone} error="" value={sPhone}/>
+                        <Input name={sAmount} label="Amount" required="required" setUsername={setsAmount} error="" value={sAmount}/>
                     </div>
                     <div className="row row-space">
                         <div className="col-2">
                             <div className="input-group">
-                            <label className="label">Country</label>
-                            <div className="rs-select2 js-select-simple select--no-search">                         
-                                 <Country value={sCountry}/>  
-                            <div className="select-dropdown"></div>
-                        </div>
-                    </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <Input name={sEmail} label="Email" required="" setUsername={setsEmail} error="" value={sEmail}/>
-                                <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                <label className="label">Country</label>
+                                <div className="input-group-icon">                         
+                                    <Country value={sCountry}/>  
+                                </div>
                             </div>
                         </div>
+                        <Input name={sEmail} label="Email" required="" setUsername={setsEmail} error="" value={sEmail}/>  
                         <div className="col-2">
                             <div className="input-group">
                             <label className="label">Currency</label>
-                            <CurrencySelect value={setsCurrency}/>
+                            <div className="input-group-icon"> 
+                                <CurrencySelect value={setsCurrency}/>
+                            </div>
                             </div>
                         </div>
-                        <div className="col-2">
+                        {/* <div className="col-2">
+                        <div className="input-group">
                         <label className="label">Placeholder</label>
                                 <div className="input-group-icon">
                                     <input className="input--style-4 js-datepicker" type="text" name="birthday"/>
                                     <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                 </div> 
                         </div>
+                        </div> */}
+                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold}/>
+
                         
                     </div>
                     <hr style={{backgroundColor:'gray',height:'2px'}}/>
                     <h4 className="sub-title">Receiver Details:</h4>
                     <div className="row row-space">
-                        <div className="col-2">
                         <Input name={rName} label="Name" required="required" setUsername={setrName} error="" value={rName}/>
-                        </div>
-                        <div className="col-2">
-                             <Input name={rCity} label="City" required="required" setUsername={setrCity} error="" value={rCity}/>
-                        </div>
-                        <div className="col-2">
-                            <Input name={rPhone} label="Phone" required="required" setUsername={setrPhone} error="" value={rPhone}/>
-                        </div>
-                        <div className="col-2">
-                            <Input name={rAmount} label="Amount" required="required" setUsername={setrAmount} error="" value={rAmount}/>
-                        </div>
+                        <Input name={rCity} label="City" required="required" setUsername={setrCity} error="" value={rCity}/>
+                        <Input name={rPhone} label="Phone" required="required" setUsername={setrPhone} error="" value={rPhone}/>
+                        <Input name={rAmount} label="Amount" required="required" setUsername={setrAmount} error="" value={rAmount}/>
                     </div>
                     <div className="row row-space">
                         <div className="col-2">
                             <div className="input-group">
-                            <label className="label">Country</label>
-                            <div className="rs-select2 js-select-simple select--no-search">                         
-                                 <Country value={rCountry}/>  
-                            <div className="select-dropdown"></div>
-                        </div>
+                                <label className="label">Country</label>
+                                <div className="input-group-icon">                        
+                                    <Country value={rCountry}/>  
+                                
                             </div>
                         </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <Input name={rEmail} label="Email" required="" setUsername={setrEmail} error="" value={rEmail}/>
-                                <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                            </div>
                         </div>
+                        <Input name={rEmail} label="Email" required="" setUsername={setrEmail} error="" value={rEmail}/>
+                        {/* <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i> */}
+                           
                         <div className="col-2">
                             <div className="input-group">
-                            <label className="label">Currency</label>
-                            <CurrencySelect value={setrCurrency}/>
+                                <label className="label">Currency</label>
+                                <div className="input-group-icon">  
+                                    <CurrencySelect value={setrCurrency}/>
                             {/* <div className="rs-select2 js-select-simple select--no-search">
                             <select class='form-control selectpicker' value={sCurrency} onChange={(e)=>setsCurrency(e.target.value)}>
                                 <option disabled="disabled" selected="selected">Choose Currency</option>
@@ -260,9 +245,10 @@ return(
                             </select>
                             <div className="select-dropdown"></div>
                         </div> */}
+                                </div>
                             </div>
                         </div>
-                        <div className="col-2">
+                        {/* <div className="col-2">
                             <div className="input-group">
                             
                                 <label className="label">Placeholder</label>
@@ -271,7 +257,9 @@ return(
                                     <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                 </div> 
                             </div>
-                        </div>
+                        </div> */}
+                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold}/>
+
                     </div>
                     <hr style={{backgroundColor:'gray',height:'2px'}}/>
                     <div className="row row-space">
@@ -284,16 +272,8 @@ return(
                                        return <option value={item.id}>{item.name}</option>
                                 })}
                             </select>
-                            <div className="select-dropdown"></div>
                         </div>
                     </div>
-                    </div>
-                    
-                    <div className="col-2">                  
-                    <div className="input-group">    
-                    <label className="label">Reference</label>                          
-                                <input className="input--style-4" type="text" name="phone" value={referenceP} onChange={(e)=>setReference(e.target.value)}/>
-                            </div>
                     </div>
                     <div className="col-2">
                             <div className="input-group">
@@ -304,14 +284,21 @@ return(
                                 <option value='Paid'>Paid</option>
                                 <option value='NotPaid'>NotPaid</option>
                             </select>
-                            <div className="select-dropdown"></div>
+                            
                         </div>
                             </div>
                         </div>
+                    <div className="col-2">                  
+                    <div className="input-group">    
+                               <label className="label">Reference</label>                          
+                                <input className="input--style-4" type="text" name="phone" value={referenceP} onChange={(e)=>setReference(e.target.value)}/>
+                            </div>
+                    </div>
+                    
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Comment</label>
-                                <textarea className="input--style-4" type="text" style={{minWidth:'290px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
+                                <textarea className="input--style-4" type="text" style={{minWidth:'200px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
                             </div>
                         </div>
                     </div>

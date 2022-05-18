@@ -20,12 +20,12 @@ const Transaction=()=> {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [txData,settxData]=useState([])
-  const [resdata,setData]=useState([])
+  //const [resdata,setData]=useState([])
   const [users,setUsers]=useState([])
   const [usdBalance,setUsdBalance]=useState(0)
   const [localBalance,setLocalBalance]=useState(0)
   const [selectedPage, setSelectedPage] = useState('')
- 
+
 
 
 function handleAdd() {
@@ -42,7 +42,7 @@ function handleSeeRequest() {
 function handleSearch(e,property){
   
   console.log('######',property,e.target.value)
-  const txDataTemp=[...resdata]
+  const txDataTemp=[...txData]
   console.log('######',txDataTemp)
   const result=txDataTemp.filter(object=> {
     console.log(startDate,endDate)
@@ -70,13 +70,15 @@ function handlePageSwitch(){
 useEffect(()=>{
    TransactionService.getAllTransactions().then((res)=>{
     const response=res.data
-    setData(response)
+    // setData(response)
     UserService.getUsers().then((res)=>{
       console.log('response from users',res.data)
       let userResponse=res.data
+      console.log('current user',AuthService.getCurrentUser())
+
       if(AuthService.getCurrentUser().role!==1){
         //filter transaction data based on agent
-        let filtered=resdata.filter((f=>f.userId==AuthService.getCurrentUser().id))
+        let filtered=response.filter((f=>f.userId==AuthService.getCurrentUser().id))
    
         let filteredUser=userResponse.filter((u)=>u.id===AuthService.getCurrentUser().id)  
         settxData(filtered)
@@ -200,6 +202,8 @@ console.log('user....',users)
            setSelectedPage={setSelectedPage}
            setPageState={setPageState}
            handlePageSwitch={handlePageSwitch}
+           selectedTxn={selectedTxn}
+           setSelectedTxn={setSelectedTxn}
         />
         {/* adding pagination to the transaction page */}
         {/* <Pagination

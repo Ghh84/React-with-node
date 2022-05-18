@@ -77,7 +77,7 @@ const Add=({handlePageSwitch})=>{
         <div className="addTransaction">
        <div className="page-wrapper bg-gra-02 p-t-200 p-b-180 font-poppins">
         <div class="input-group">
-            <div className="card card">
+            <div className="card card-2">
             <div className="card-body">
                 {/* //<div > */}
                     <h2 className="title">User registration Form</h2>
@@ -97,7 +97,7 @@ const Add=({handlePageSwitch})=>{
 
                         <div className="row row-space">
                              {/* <div className="col-2"> */}
-                             <Input name={name} label="Name" required="required" setUsername={setName} value={name} error=""/>
+                             <Input name={name} label="Full Name" required="required" setUsername={setName} value={name} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Name</label>
                                     <input className="input--style-4" type="text" onChange={(e)=>setName(e.target.value)} name="first_name"/>
@@ -121,9 +121,11 @@ const Add=({handlePageSwitch})=>{
                                         <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                     </div>
                                 </div> */}
-                            <div className="col-4">
+                                <Input name={email} label="Email address" required="" setUsername={setEmail} value={email} error=""/>
+
+                            <div className="col-2">
                                 <div className="input-group">
-                                <label className="label">country<span class="required"></span></label>
+                                <label className="label">country &nbsp;&nbsp;&nbsp;<span class="required"></span></label>
                                 <diV className="input-group-icon">
                                     <select class="form-control selectpicker"  onChange={(e)=>setCountry(e.target.value)}>
                                         <option disabled="disabled" selected="selected">Country</option>
@@ -134,7 +136,6 @@ const Add=({handlePageSwitch})=>{
                                 </diV>
                              </div>
                              </div>
-                            <Input name={email} label="Email" required="" setUsername={setEmail} value={email} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label">Email</label>
                                     <div className="input-group-icon">
@@ -152,7 +153,7 @@ const Add=({handlePageSwitch})=>{
                                     <label className="label" class="required">Balance</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setBalance(e.target.value)} name="email"/>
                                 </div> */}
-                            <Input name={phone} label="Phone" required="required" setUsername={setPhone} value={phone}error=""/>
+                            <Input name={phone} label="Phone No." required="required" setUsername={setPhone} value={phone}error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Phone</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setPhone(e.target.value)} name="phone"/>
@@ -165,7 +166,7 @@ const Add=({handlePageSwitch})=>{
                                     <label className="label" class="required">Balance</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setBalance(e.target.value)} name="email"/>
                                 </div> */}
-                            <div className="col-3">
+                            <div className="col-2">
                             <div className="input-group">
                             <label className="label">Currency <span class="required"></span></label>
                            
@@ -191,6 +192,7 @@ const Add=({handlePageSwitch})=>{
                                 </div> */}
                             {/* </div> */}
                             {/* <div style={{width: '185px'}}> */}
+                               
                                 <Input name={password} label="Password" required="required"  setUsername={setPassword} value={password} error=""/>
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Password</label>
@@ -216,14 +218,20 @@ const Add=({handlePageSwitch})=>{
                             </div>
                     </div> */}
                       <div className="row row-space">
+                      <div className="col-5">
+                            <div className="input-group">
+                            <label className="label">Select role for the user:<span class="required"></span></label>
+                               
                             <Select class="form-control selectpicker" name={name} label="Choose Role" option='1' setRole={setRole} /> 
-                            <span></span><span></span>                 
+                            
+                            </div>
+                        </div>            
                             {/* <Input name={localBalance} label="Balance(local)" required="" setUsername={setLocalBalance} value={localBalance} error=""/> */}
                                 {/* <div className="input-group">
                                     <label className="label" class="required">Balance</label>
                                     <input className="input--style-4" type="number" onChange={(e)=>setBalance(e.target.value)} name="email"/>
                                 </div> */}
-                            <div className="col-3">
+                            <div className="col-2">
                             <div className="input-group">
                             <label className="label">Comment <span></span></label>                           
                             <div>
@@ -233,7 +241,7 @@ const Add=({handlePageSwitch})=>{
                             </div >
                         </div> 
                     <div className="row row-space">                  
-                    <div className="col-12">
+                    <div className="col-20">
                     <div className='input-group'>
                         <Button variant='success' style={{marginLeft:'180px',minWidth:'100px'}} onClick={()=>handleAdd()}>Add</Button>
                         <Button  variant='warning' style={{marginLeft:'50px',minWidth:'100px'}} onClick={()=>handlePageSwitch()}>Back</Button>
@@ -263,9 +271,9 @@ const Edit=({handlePageSwitch,selectedUser})=>{
     const [message,setMessage]=useState('')
     const [succeded,setSucceded]=useState('')
     const [errored,setErrored]=useState('')
-    const [id,setUserId]=useState(selectedUser.id)
+    const [userId,setUserId]=useState(selectedUser.userId)
     function handleEdit(){
-        const obj={name,city,country,phone,email,balance,role,username,password,id}
+        const obj={name,city,country,phone,email,role,username,password,userId}
         if(obj.name===''||obj.username===''||obj.password==='') {
             setErrored('')
             setSucceded('')
@@ -300,18 +308,19 @@ const Edit=({handlePageSwitch,selectedUser})=>{
                     
                      <form method="POST">
                         <div className="row row-space">
+                             <div className="col-2">
+                                <div className="input-group">
+                                    <label className="label">UserId</label>
+                                    <input className="input--style-4" type="text" value={userId} onChange={(e)=>setUserId(e.target.value)} name="first_name"/>
+                                </div>
+                            </div>
                             <div className="col-2">
                                 <div className="input-group">
                                     <label className="label">Name</label>
                                     <input className="input--style-4" value={name} onChange={(e)=>setName(e.target.value)} type="text" name="first_name"/>
                                 </div>
                             </div>
-                            <div className="col-2">
-                                <div className="input-group">
-                                    <label className="label">City</label>
-                                    <input className="input--style-4" type="text" value={city} onChange={(e)=>setCity(e.target.value)} name="first_name"/>
-                                </div>
-                            </div>
+                           
                         </div>
                         <div className="row row-space">
                             <div className="col-2">
@@ -325,11 +334,8 @@ const Edit=({handlePageSwitch,selectedUser})=>{
                             </div>
                             <div className="col-2">
                                 <div className="input-group">
-                                    <label className="label">Email</label>
-                                    <div className="input-group-icon">
-                                        <input className="input--style-4 js-datepicker"  value={email} onChange={(e)=>setEmail(e.target.value)} type="email" name="birthday"/>
-                                        <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                    </div>
+                                    <label className="label">City</label>
+                                    <input className="input--style-4" type="text" value={city} onChange={(e)=>setCity(e.target.value)} name="first_name"/>
                                 </div>
                             </div>
                             
@@ -337,10 +343,19 @@ const Edit=({handlePageSwitch,selectedUser})=>{
                         <div className="row row-space">
                             <div className="col-2">
                                 <div className="input-group">
+                                    <label className="label">Email</label>
+                                    <div className="input-group-icon">
+                                        <input className="input--style-4 js-datepicker"  value={email} onChange={(e)=>setEmail(e.target.value)} type="email" name="birthday"/>
+                                        <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* <div className="col-2">
+                                <div className="input-group">
                                     <label className="label">Balance</label>
                                     <input className="input--style-4" value={balance} onChange={(e)=>setBalance(e.target.value)} type="number" name="email"/>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="col-2">
                                 <div className="input-group">
                                     <label className="label">Phone</label>
@@ -425,6 +440,7 @@ const Users =()=>{
             <table className='usersTable'>
                 <thead>
                     <tr>
+                        <th>userId</th>
                         <th>Name</th>
                         <th>username</th>
                         <th>password</th>
@@ -434,7 +450,8 @@ const Users =()=>{
                 <tbody>
                         {userData.map((item,index)=>{
                             return <tr>
-                                <td><a href='#' onClick={()=>handleSelection(item)}>{item.name}</a></td>
+                                <td><a href='#' onClick={()=>handleSelection(item)}>{item.userId}</a></td>
+                                <th>{item.name}</th>
                                 <td>{item.username}</td>
                                 <td>{item.password}</td>
                                 <td>{item.role}</td>

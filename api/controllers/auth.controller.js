@@ -17,7 +17,7 @@ const DbConnection=require('../db')
       }else {
         if(!_.isEmpty(rows)){
           console.log('data sent...',rows[0].name,rows.role)
-          res.status(200).send({username:rows[0].username,role:rows[0].role,id:rows[0].id});
+          res.status(200).send({username:rows[0].username,role:rows[0].role,id:rows[0].id,userId:rows[0].userId});
         }
         else res.status(400).send({ message:'Invalid credentials! Try again' });
       }

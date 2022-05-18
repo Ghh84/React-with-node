@@ -5,7 +5,6 @@ import { Button, Alert } from "react-bootstrap";
 import AuthService from '../../services/auth.service'
 import TableHeader from "../common/tableHeader";
 import CurrencySelect from "../common/currency";
-import Input from "../common/input";
 
  const RequestTable = ({columns, handlePageSwitch,sortColumn, handleSort,
     SelectedRequest, getUserName, handleApproveRequest, handleReject, Message,
@@ -23,13 +22,22 @@ import Input from "../common/input";
            {errored &&
                        <Alert variant='danger'>{errored}</Alert>}
            <form method="POST">
-               <div className="col-10">
-                   <Input name='amount' label="Amount" required="required" setUsername={setAmount} error="" value={amount} />
+                    {/* <Input name='amount' label="Amount" required="required" setUsername={setAmount} error="" value={amount} /> */}
+                    <div className="col-5">
+                        <div className="input-group">
+                            <label className="label">Amount<span class="required"></span></label>
+                            <div className="input-group-icon">
+                                <input  name='amount'  value={amount} className="form-control" type="text" 
+                                 onChange={(e) => setAmount(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
                    <label className="label" required >Currency</label>
                    <CurrencySelect required='required' name='currency' setUsername={setsCurrency}error="" value={currency} />
                    <label className="label">Comment</label>
                    <textarea className="input--style-4" type="text" style={{minWidth:'300px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
-                </div>               
+                             
                <div className='input-group'>
                     <Button variant='success' style={{marginLeft:'25px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handleRequest()}>Request</Button>
                    <Button  variant='warning' style={{marginLeft:'30px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handlePageSwitch()}>Back</Button>

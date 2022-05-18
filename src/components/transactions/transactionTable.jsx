@@ -9,6 +9,8 @@ const TransactionTable = ({
   dataLimit,
   selectedPage,
   setSelectedPage,
+  selectedTxn,
+  setSelectedTxn,
   setPageState,
   handlePageSwitch,
 }) => {
@@ -31,7 +33,7 @@ const TransactionTable = ({
 
   //   const [pages] = useState(Math.round(data.length / dataLimit))
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedTxn, setSelectedTxn] = useState([])
+  //const [selectedTxn, setSelectedTxn] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [sortColumn, setColumnData] = useState({
     path: 'status',

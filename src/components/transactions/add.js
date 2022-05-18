@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Alert } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import UserService from '../../services/user.service';
+import AuthService from '../../services/auth.service';
 import configs from '../../configs/local'
 import _ from 'lodash'
 const Add=({handlePageSwitch})=>{
@@ -47,15 +48,15 @@ const Add=({handlePageSwitch})=>{
         }
         console.log('going to add a new transaction....',addObject)
         //validate data before sending
-        alert(addObject.rCurrency)
+        
         if(addObject.sName==''||addObject.sAmount==''||addObject.sPhone==''|| addObject.rName==''||addObject.rAmount==''||
         addObject.rPhone=='' ||addObject.userId=='' || addObject.rCurrency=='') setMessage('One or more information is missing!')
         else{
         TransactionService.addTransaction(addObject).then((res)=>{
+            
             console.log('response from addition',res.data)
             setErrored('')
-                  setSucceded('A new Transaction is successfully added!')
-                  setMessage('')
+            setSucceded('A new Transaction is successfully added!')
         }).catch((err)=>{
             setSucceded('')
             setErrored('New Transaction creation failed!')
@@ -64,6 +65,8 @@ const Add=({handlePageSwitch})=>{
     }
       }
       useEffect(()=>{
+
+        setUserId(AuthService.getCurrentUser().userId)
         UserService.getUsers().then((res)=>{
             console.log('response from users',res.data)
             setUsers(res.data)
