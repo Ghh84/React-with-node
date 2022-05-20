@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
+import Joi from 'joi-browser'
 import { Button, Alert } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import UserService from '../../services/user.service';
 import AuthService from '../../services/auth.service'
+// import Country from "../common/country";
+import Input from "../common/input";
+import configs from '../../configs/local'
+// import CurrencySelect from "../1 not used/currency";
+
 const Edit=({handlePageSwitch,selectedTxn})=>{
     console.log('selected transaction.........',selectedTxn)
       const [sName,setsName]=useState(selectedTxn.sName)
@@ -12,6 +18,7 @@ const Edit=({handlePageSwitch,selectedTxn})=>{
       const [sCurrency,setsCurrency]=useState(selectedTxn.sCurrency)
       const [sPhone,setsPhone]=useState(selectedTxn.sPhone)
       const [sEmail,setsEmail]=useState(selectedTxn.sEmail)
+      const [sPlacehold,setsPlaceholder]=useState(selectedTxn.sPlacehold)
       const [rName,setrName]=useState(selectedTxn.rName)
       const [rCity,setrCity]=useState(selectedTxn.rCity)
       const [rAmount,setrAmount]=useState(selectedTxn.rAmount)
@@ -28,6 +35,7 @@ const Edit=({handlePageSwitch,selectedTxn})=>{
       const [status,setStatus]=useState(selectedTxn.status)
       const [comment,setComment]=useState(selectedTxn.comment)
       const [initialStatus,setInitialStatus]=useState(selectedTxn.status)
+
       function handleEdit(){
         const editObject={
             sName:sName,
@@ -50,9 +58,70 @@ const Edit=({handlePageSwitch,selectedTxn})=>{
             comment:comment,
             ticketNo:ticketNo
         }
+        // set validation Schema
+        const schema = {
+            userId: Joi.string(),
+            sName: Joi.string()
+              .required()
+              .label("Name"),
+            sCity: Joi.string()
+              .required()
+              .label("City"),
+            sAmount: Joi.string()
+              .required()
+              .label("Amount"),
+            sCountry: Joi.string()
+              .required()
+              .label("Country"),
+              sName: Joi.string()
+              .required()
+              .label("Name"),
+            sCurrency: Joi.string()
+              .required()
+              .label("Currency"),
+            sPhone: Joi.number()
+              .required()
+              .min(0)
+              .max(100)
+              .label("Phone"),
+            sEmail:Joi.string().email(),
+            sName: Joi.string()
+              .required()
+              .label("Name"),
+            sCity: Joi.string()
+              .required()
+              .label("City"),
+            sAmount: Joi.string()
+              .required()
+              .label("Amount"),
+            sCountry: Joi.string()
+              .required()
+              .label("Country"),
+            rName: Joi.string()
+              .required()
+              .label("Name"),
+            rCurrency: Joi.string()
+              .required()
+              .label("Currency"),
+            rPhone: Joi.number()
+              .required()
+              .min(0)
+              .max(100)
+              .label("Phone"),
+            rEmail:Joi.string().email(),
+
+            username: Joi.string()
+            .required()
+            .label("Username"),
+          password: Joi.string()
+            .required()
+            .label("Password")
+          };
         
         //validate data before sending
+        
         TransactionService.editTransaction(editObject).then((res)=>{
+            alert(editObject.sAmount)
             //update user balance
             let updatedBalance=0
             let currentUser=users.filter(u=>u.id==userId)
@@ -92,8 +161,7 @@ return(
         <div className="card card-4">
             {AuthService.getCurrentUser().role==1?
             (<div className="card-body">
-                <div className="edit-top">
-               
+                <div className="edit-top">         
                 <h2 className="title">Edit Transaction</h2>
                 <hr style={{backgroundColor:'gray',height:'2px'}}/>
                 <h4 style={{color:'blue'}}>Ticket No:{ticketNo}</h4>
@@ -106,60 +174,90 @@ return(
                 <form method="POST">
                 <h4 className="sub-title"> Sender Details:</h4>
                     <div className="row row-space">
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Name <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="first_name" value={sName} onChange={(e)=>setsName(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">City</label>
-                                <input className="input--style-4" type="text" name="first_name" value={sCity} onChange={(e)=>setsCity(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Phone <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="first_name" value={sPhone}  onChange={(e)=>setsPhone(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Amount <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="first_name" value={sAmount}  onChange={(e)=>setsAmount(e.target.value)}/>
-                            </div>
-                        </div>
+                        <Input name={sName} label="Name" required="required" setUsername={setsName} error="" value={sName}  classN='col-2'/>
+                        <Input name={sCity} label="City" required="required" setUsername={setsCity} error="" value={sCity} classN='col-2'/>
+                        <Input name='sPhone' label="Phone" required="required" setUsername={setsPhone} error="" value={sPhone} classN='col-2'/>
+                        <Input name={sAmount} label="Amount" required="required" setUsername={setsAmount} error="" value={sAmount} classN='col-2'/>
                     </div>
                     <div className="row row-space">
                         <div className="col-2">
                             <div className="input-group">
-                            <label className="label">Country</label>
-                            <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker' value={sCountry}  onChange={(e)=>setsCountry(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Country</option>
-                                <option value='Canada'>Canada</option>
-                                <option value='Eritrea'>Eritrea</option>
-                                <option value='Ethiopia'>Ethiopia</option>
-                                <option value='Uganda'>Uganda</option>
-                            </select>
-                            <div className="select-dropdown"></div>
-                        </div>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Email</label>
-                                <div className="input-group-icon">
-                                    <input className="input--style-4 js-datepicker" type="text" name="birthday" value={sEmail} onChange={(e)=>setsEmail(e.target.value)}/>
-                                    <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                <label className="label">Country</label>
+                                <div className="input-group-icon">                         
+                                <select class="form-control selectpicker"  onChange={(e)=>setrCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select>  
                                 </div>
                             </div>
                         </div>
+                        <Input name={sEmail} label="Email" required="" setUsername={setsEmail} error="" value={sEmail} classN='col-2'/>  
                         <div className="col-2">
                             <div className="input-group">
                             <label className="label">Currency</label>
-                            <div className="rs-select2 js-select-simple select--no-search">
+                            <div className="input-group-icon"> 
+                            <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
+                            </div>
+                            </div>
+                        </div>
+                        {/* <div className="col-2">
+                        <div className="input-group">
+                        <label className="label">Placeholder</label>
+                                <div className="input-group-icon">
+                                    <input className="input--style-4 js-datepicker" type="text" name="birthday"/>
+                                    <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                </div> 
+                        </div>
+                        </div> */}
+                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold} classN='col-2'/>
+
+                        
+                    </div>
+                    <hr style={{backgroundColor:'gray',height:'2px'}}/>
+                    <h4 className="sub-title">Receiver Details:</h4>
+                    <div className="row row-space">
+                        <Input name={rName} label="Name" required="required" setUsername={setrName} error="" value={rName} classN='col-2'/>
+                        <Input name={rCity} label="City" required="required" setUsername={setrCity} error="" value={rCity} classN='col-2'/>
+                        <Input name={rPhone} label="Phone" required="required" setUsername={setrPhone} error="" value={rPhone} classN='col-2'/>
+                        <Input name={rAmount} label="Amount" required="required" setUsername={setrAmount} error="" value={rAmount} classN='col-2'/>
+                    </div>
+                    <div className="row row-space">
+                        <div className="col-2">
+                            <div className="input-group">
+                                <label className="label">Country</label>
+                                <div className="input-group-icon">                        
+                                <select class="form-control selectpicker"  onChange={(e)=>setrCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select>  
+                                
+                            </div>
+                        </div>
+                        </div>
+                        <Input name={rEmail} label="Email" required="" setUsername={setrEmail} error="" value={rEmail} classN='col-2'/>
+                        {/* <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i> */}
+                           
+                        <div className="col-2">
+                            <div className="input-group">
+                                <label className="label">Currency</label>
+                                <div className="input-group-icon">  
+                                    {/* <CurrencySelect value={setrCurrency}/> */}
+                                    <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected"> Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
+                            {/* <div className="rs-select2 js-select-simple select--no-search">
                             <select class='form-control selectpicker' value={sCurrency} onChange={(e)=>setsCurrency(e.target.value)}>
                                 <option disabled="disabled" selected="selected">Choose Currency</option>
                                 <option value='CAD'>CAD</option>
@@ -168,91 +266,22 @@ return(
                                 <option value='Shilling'>Shilling</option>
                             </select>
                             <div className="select-dropdown"></div>
-                        </div>
+                        </div> */}
+                                </div>
                             </div>
                         </div>
-                        <div className="col-2">
+                        {/* <div className="col-2">
                             <div className="input-group">
+                            
                                 <label className="label">Placeholder</label>
                                 <div className="input-group-icon">
                                     <input className="input--style-4 js-datepicker" type="text" name="birthday"/>
                                     <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                </div>
+                                </div> 
                             </div>
-                        </div>
-                        
-                    </div>
-                    <hr style={{backgroundColor:'gray',height:'2px'}}/>
-                    <h4 className="sub-title">Receiver Details:</h4>
-                    <div className="row row-space">
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Name <span class="required"></span></label>
-                                <input className="input--style-4" type="email" name="email" value={rName} onChange={(e)=>setrName(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">City</label>
-                                <input className="input--style-4" type="text" name="phone" value={rCity} onChange={(e)=>setrCity(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Phone <span class="required"></span></label>
-                                <input className="input--style-4" type="email" name="email" value={rPhone} onChange={(e)=>setrPhone(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Amount <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="phone"  value={rAmount} onChange={(e)=>setrAmount(e.target.value)}/>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row row-space">
-                    <div className="col-2">
-                            <div className="input-group">
-                            <label className="label">Country</label>
-                            <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker'  value={rCountry} onChange={(e)=>setrCountry(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Country</option>
-                                <option value='Canada'>Canada</option>
-                                <option value='Eritrea'>Eritrea</option>
-                                <option value='Ethiopia'>Ethiopia</option>
-                                <option value='Uganda'>Uganda</option>
-                            </select>
-                            <div className="select-dropdown"></div>
-                        </div>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Email</label>
-                                <input className="input--style-4" type="text" name="phone" value={rEmail} onChange={(e)=>setrEmail(e.target.value)}/>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                            <label className="label">Currency</label>
-                            <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker' value={rCurrency} onChange={(e)=>setrCurrency(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Currency</option>
-                                <option value='CAD'>CAD</option>
-                                <option value='NKF'>NKF</option>
-                                <option value='BIRR'>BIRR</option>
-                                <option value='Shilling'>Shilling</option>
-                            </select>
-                            <div className="select-dropdown"></div>
-                        </div>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label className="label">Placeholder</label>
-                                <input className="input--style-4" type="text" name="phone"/>
-                            </div>
-                        </div>
+                        </div> */}
+                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold} classN='col-2'/>
+
                     </div>
                     <hr style={{backgroundColor:'gray',height:'2px'}}/>
                     <div className="row row-space">
@@ -265,16 +294,8 @@ return(
                                        return <option value={item.id}>{item.name}</option>
                                 })}
                             </select>
-                            <div className="select-dropdown"></div>
                         </div>
                     </div>
-                    </div>
-                    
-                    <div className="col-2">                  
-                    <div className="input-group">    
-                    <label className="label">Reference</label>                          
-                                <input className="input--style-4" type="text" name="phone" value={referenceP} onChange={(e)=>setReference(e.target.value)}/>
-                            </div>
                     </div>
                     <div className="col-2">
                             <div className="input-group">
@@ -285,14 +306,21 @@ return(
                                 <option value='Paid'>Paid</option>
                                 <option value='NotPaid'>NotPaid</option>
                             </select>
-                            <div className="select-dropdown"></div>
+                            
                         </div>
                             </div>
                         </div>
+                    <div className="col-2">                  
+                    <div className="input-group">    
+                               <label className="label">Reference</label>                          
+                                <input className="input--style-4" type="text" name="phone" value={referenceP} onChange={(e)=>setReference(e.target.value)} classN='col-2'/>
+                            </div>
+                    </div>
+                    
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Comment</label>
-                                <textarea className="input--style-4" type="text" style={{minWidth:'290px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
+                                <textarea className="input--style-4" type="text" style={{minWidth:'200px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
                             </div>
                         </div>
                     </div>

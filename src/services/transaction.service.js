@@ -9,6 +9,7 @@ class TransactionService {
         console.log('came in get Transactions.........')
         return axios.get(configs.API_URL+'/api/getTransactions', { headers: authHeader() }, { timeout: 5000 });
     }
+ 
     addTransaction(TransactionData) {
         console.log('came to add Transaction.........', TransactionData)
         return axios({
@@ -35,8 +36,6 @@ class TransactionService {
             headers: authHeader()
         })
     }
-
-
     getAllTransactions() {
         console.log('get all transactions................')
         return axios.get(configs.API_URL+'/api/getAllTransactions');

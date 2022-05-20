@@ -12,7 +12,8 @@ module.exports = function (app) {
   app.get("/api/getBalances", [authJwt.verifyToken], controller.getBalances);
   app.get("/api/getBalance/:id", [authJwt.verifyToken], controller.getBalance);
 
-  app.post("/api/updateBalance", [authJwt.verifyToken], controller.updateBalance);
+  app.post("/api/updateBalance",[authJwt.verifyToken],controller.updateBalance);
+  app.post("/api/updateBalanceFromRequest",[authJwt.verifyToken],controller.updateBalanceFromRequest);
   app.post("/api/addBalance", [authJwt.verifyToken], controller.addBalance);
   app.post("/api/deleteBalance", [authJwt.verifyToken], controller.deleteBalance);
 };

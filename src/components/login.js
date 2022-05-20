@@ -5,6 +5,8 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
 import { Switch, Route, Link, Redirect, useHistory, withRouter } from "react-router-dom";
+
+import Joi  from 'joi-browser';
 const required = value => {
     if (!value) {
         return (
@@ -14,13 +16,16 @@ const required = value => {
         );
     }
 };
-
 class Login extends Component {
+    schema = {
+        username: Joi.string().required().label("Username"),
+        password: Joi.string().required().label("Password"),
+  }
     constructor(props) {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
         this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
+         this.onChangePassword = this.onChangePassword.bind(this);
 
         this.state = {
             username: "",
@@ -42,7 +47,7 @@ class Login extends Component {
         });
     }
 
-    handleLogin(e) {
+    handleLogin=(e)=> {
         e.preventDefault();
 
         this.setState({
@@ -51,7 +56,6 @@ class Login extends Component {
         });
 
         this.form.validateAll();
-
         if (this.checkBtn.context._errors.length === 0) {
           console.log('came here on login....')
              AuthService.login(this.state.username, this.state.password).then(
@@ -79,7 +83,7 @@ class Login extends Component {
                 loading: false
             });
         }
-    }
+        }
 
     render() {
         return (
@@ -107,8 +111,9 @@ class Login extends Component {
                                 onChange={this.onChangeUsername}
                                 validations={[required]}
                             />
+                        {/* <Input name='username' label="Username" required='required' setUsername={this.onChangeUsername} error={errors} value={this.state.account.username}/> */}
                         </div>
-
+                        {/* {this.state.errors && <div className="alert alert-danger">{this.state.errors.username}</div>} */}
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
                             <Input
@@ -120,7 +125,7 @@ class Login extends Component {
                                 validations={[required]}
                             />
                         </div>
-
+                        {/* {this.state.errors && <div className="alert alert-danger">{this.state.errors.password}</div>} */}
                         <div className="form-group">
                             <button
                                 className="btn btn-primary btn-block"
