@@ -2,6 +2,7 @@ module.exports={
    
     API_URL:'http://localhost:8080',
     statuses:['Pending','Paid','NotPaid'],
+<<<<<<< HEAD
     //countries:['Eritrea','Ethiopia','Canada','Uganda'],
     countries: ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla",
     "Antigua &amp; Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan",
@@ -54,4 +55,8 @@ module.exports={
     password:'hani1984',
     database:'demodb',
     port:'3306'
+=======
+    countries:['Eritrea','Ethiopia','Canada','Uganda'],
+    doneby:'Amanuel and gherie'
+>>>>>>> 4a91b949ff09515695a27d77391e77698d1395c5
 }
