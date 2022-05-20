@@ -233,6 +233,7 @@ const Balance =({handleSelection})=>{
     const [user,setUser]=useState(1)
     const [balanceData,setBalanceData]=useState([])
     const [currency,setCurrency]=useState('')
+    const [modalTitle,setModalTitle]=useState('')
     const [selectedPage, setSelectedPage] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const dataLimit=2;
@@ -312,11 +313,12 @@ const Balance =({handleSelection})=>{
         }
            ))
      }
-      function handleModalOpen(userId,usdAdminAmt,localAdminAmt,usdAmt,localAmt,action,currency){
+      function handleModalOpen(userId,usdAdminAmt,localAdminAmt,usdAmt,localAmt,action,currency, title){
         setUserUsdAmt(parseFloat(usdAmt))
         setUserLocalAmt(parseFloat(localAmt))
         setUserAdminUsdAmt(parseFloat(usdAdminAmt))
         setUserAdminLocalAmt(parseFloat(localAdminAmt))
+        setModalTitle(title)
         setUser(userId)
         setAddOrSubtruct(action)
         setCurrency(currency)
@@ -372,24 +374,24 @@ const Balance =({handleSelection})=>{
                     keyboard={false}
                     
                     >
-                    <Modal.Header closeButton>
-                        <Modal.Title>Update Balance</Modal.Title>
+                    <Modal.Header closeButton className='teableHeader'>
+                        <Modal.Title>{modalTitle}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <div className="row"><p>Admin balance update form</p></div>
+                        <div className="row"><p>Admin balance:</p></div>
                         <div className="row">
-                            <Input  label="Admin Usd Amount"   setUsername={setModalAdminUsdAmt} value={modalAdminUsdAmt} type="text" />
-                            <Input  label="Admin Local Amount"  setUsername={setModalAdminLocalAmt} value={modalAdminLocalAmt} type="text" />
+                            <Input  label="Usd"   setUsername={setModalAdminUsdAmt} value={modalAdminUsdAmt} type="text" />
+                            <Input  label="Local"  setUsername={setModalAdminLocalAmt} value={modalAdminLocalAmt} type="text" />
                         </div>
                         <hr style={{color:'blue',height:'2px'}}/><br/>
-                        <div className="row"><p>User balance update form</p></div>
+                        <div className="row"><p>User balance:</p></div>
                         <div className="row">
-                            <Input  label="User Usd Amount"   setUsername={setModalUsdAmt} value={modalUsdAmt} type="text" />
-                            <Input  label="User Local Amount"  setUsername={setModalLocalAmt} value={modalLocalAmt} type="text" />
+                            <Input  label="Usd"   setUsername={setModalUsdAmt} value={modalUsdAmt} type="text" />
+                            <Input  label="Local"  setUsername={setModalLocalAmt} value={modalLocalAmt} type="text" />
                         </div>
                         <div className="row">
                            <div className='col-8'>
-                                <label className="label">Add reason/comment</label>
+                                <label className="label">Comment</label>
                                 <textarea className="input--style-4" value={modalComm} type="text" onChange={(e)=>setModalComm(e.target.value)}/>                                                   
                             </div>
                         </div>
@@ -409,9 +411,9 @@ const Balance =({handleSelection})=>{
 
         </div> */}
         <table className="table" style={{width: '800px',marginTop:'50px', marginLeft:'350px'}}>
-        <thead className="thead-dark">
+        <thead className="tableHeader">
             <tr>
-                <th rowSpan={2}>userId</th>
+                {/* <th rowSpan={2}>userId</th> */}
                 <th rowSpan={2}>Name</th>
                 <th colSpan={2}>Admin balance</th>
                 <th colSpan={2}>User balance</th>
@@ -429,7 +431,7 @@ const Balance =({handleSelection})=>{
       <tbody>
       {!_.isEmpty(balanceData) && getPaginatedData().map(item=>{
           return(<tr>
-              <td>{item.userId}</td>
+              {/* <td>{item.userId}</td> */}
               <td>{getUserName(item.userId)}</td>
               <td>{parseFloat(item.adminUSD)}</td>
               {/* <td>
@@ -439,10 +441,10 @@ const Balance =({handleSelection})=>{
               </td> */}
               <td>{parseFloat(item.adminLocal)}</td>              
               <td>{parseFloat(item.USDbalance)}</td>
-              <td>{parseFloat(item.USDbalance)}</td>
+              <td>{parseFloat(item.localBalance)}</td>
               <td>
-                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.userId,item.adminUSD,item.adminLocal,item.USDbalance,item.localBalance,'add','local')}>+</Button>&nbsp;
-                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.userId,item.adminUSD,item.adminLocal,item.USDbalance,item.localBalance,'subtruct','local')}>-</Button>
+                  <Button className="btn btn-primary btn-sm" onClick={()=>handleModalOpen(item.userId,item.adminUSD,item.adminLocal,item.USDbalance,item.localBalance,'add','local','Add balance')}>+</Button>&nbsp;
+                  <Button className="btn btn-danger btn-sm" onClick={()=>handleModalOpen(item.userId,item.adminUSD,item.adminLocal,item.USDbalance,item.localBalance,'subtruct','local','Deduct balance')}>-</Button>
               </td>
           </tr>
       )})}

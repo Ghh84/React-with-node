@@ -63,7 +63,7 @@ const updateBalanceFromRequest = (req, res) => {
     values.push(value)
   }
   console.log('values',values)
-  if(values[3]=='$'){
+  if(values[3]=='United States Dollar'){
     connection.query("UPDATE  balance SET USDbalance=USDbalance+?,comment=? where userId=?",
     [values[2],values[4],values[1]],(err,row)=>{
       if(err){
@@ -99,7 +99,7 @@ const addBalance = async (req, res) => {
   }
   console.log(values)
   
-  connection.query("INSERT INTO  balance (userId,USDbalance,localBalance,comment) VALUES (?)",[values],(err,row)=>{
+  connection.query("INSERT INTO  balance (userId,USDbalance,localBalance,localCurrency,comment) VALUES (?)",[values],(err,row)=>{
     if(err){
       console.log('error adding to users',err)
     }

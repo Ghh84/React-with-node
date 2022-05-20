@@ -5,7 +5,7 @@ var connection=DbConnection
 if(!connection._connectCalled ){
   connection.connect();
 }
-const sql="SELECT t.*,u.id,u.name from  transactions as t INNER JOIN users as u ON t.userId= u.id ORDER BY createdDate DESC"
+const sql="SELECT t.*,u.userId,u.name from  transactions as t INNER JOIN users as u ON t.userId= u.userId ORDER BY createdDate DESC"
 const sqlInsert="INSERT INTO transactions (sName,sCity,sAmount,sCountry,sCurrency,sPhone,sEmail,rName,rCity,rAmount,rCountry:,rCurrency,rPhone,rEmail,userId,referenceP) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
 const getTransactions = (req, res) => {

@@ -159,7 +159,7 @@ return(
                                 <option value='Shilling'>Shilling</option>
                             </select> */}
                             <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Currency</option>
+                                <option disabled="disabled" selected="selected">Currency</option>
                                 {configs.currencies.map((c,index)=>{
                                     return <option value={c}>{c}</option>
                                 })}
@@ -251,7 +251,7 @@ return(
                                 <option value='Shilling'>Shilling</option>
                             </select> */}
                             <select class="form-control selectpicker"  onChange={(e)=>setrCurrency(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Currency</option>
+                                <option disabled="disabled" selected="selected">Currency</option>
                                 {configs.currencies.map((c,index)=>{
                                     return <option value={c}>{c}</option>
                                 })}
@@ -287,31 +287,28 @@ return(
                     </div>
                     </div>
                     
-                    <div className="col-2">                  
-                    <div className="input-group">    
-                    <label className="label">Reference</label>   
-                    <div className="input-group-icon">
-                        <input className="form-control"  type="text" name="phone" onChange={(e)=>setReference(e.target.value)}/>
-                    </div>                       
-                    </div>
-                    </div>
-                    </div>
-                    <div className="row ">
-                    <div className="col-12">
-                    <div className='input-group'>
-                        <div className="flexButtons">
-                        <Button variant='success' className="bsuccess" style={{}} onClick={()=>handleAdd()}>Add</Button>
-                        <Button  variant='warning' className="bwarning" style={{marginLeft:'50px',minWidth:'100px'}} onClick={()=>handlePageSwitch()}>Back</Button>
+                    <div className="col-2">   
+                        <div className="input-group"> 
+                            <label className="label">Reference</label>   
+                            <div className="input-group-icon">
+                                <input className="form-control"  type="text" name="phone" onChange={(e)=>setReference(e.target.value)}/>
+                            </div>                       
                         </div>
-                        </div>
-
+                    </div>
+                    </div>
+                    <div className="row row-space">
+                    < span></span><span></span><span></span><span></span><span></span><span></span>
+                    <div > <Button variant='success' className="bsuccess" style={{}} onClick={()=>handleAdd()}>Add</Button>
+                        <Button  variant='warning' className="bwarning" style={{marginLeft:'10px',minWidth:'10px'}} onClick={()=>handlePageSwitch()}>Back</Button>
+                    </div>
                     </div>
                     
-                    </div>
-                </form>
+              </form>
             </div>
         </div>
+        
     </div>
+    
 </div>
 </div>
 )

@@ -78,9 +78,9 @@ useEffect(()=>{
 
       if(AuthService.getCurrentUser().role!==1){
         //filter transaction data based on agent
-        let filtered=response.filter((f=>f.userId==AuthService.getCurrentUser().id))
+        let filtered=response.filter((f=>f.userId==AuthService.getCurrentUser().userId))
    
-        let filteredUser=userResponse.filter((u)=>u.id===AuthService.getCurrentUser().id)  
+        let filteredUser=userResponse.filter((u)=>u.id===AuthService.getCurrentUser().userId)  
         settxData(filtered)
         setUsers(filteredUser)
       }
@@ -166,7 +166,7 @@ console.log('user....',users)
           <div>
           {AuthService.getCurrentUser().role===1 &&
             <div>
-            <Button label='Add New Transaction' handleAdd={handleAdd}/>
+            <Button label='Add New' handleAdd={handleAdd}/>
            </div>
                 }
           {AuthService.getCurrentUser().role!==1 &&

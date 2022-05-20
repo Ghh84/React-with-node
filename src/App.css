@@ -1098,8 +1098,25 @@ fieldset{
   position: absolute;
   float:left;  
   width:240px; 
-  
   border-right: 4px solid #bc0be8;
   top: 0%;
   bottom: 50%;
 }
+
+.buttonVisibility{
+  width: 100%;
+  height: 60%;
+  position: fixed;
+  visibility: hidden;
+  margin-top: 100px;
+}
+.tableHeader{
+  background-color:  aquamarine;
+}
+
+.modal-header
+ {
+     padding:9px 15px;
+     border-bottom:1px solid #eee;
+     background-color:  aquamarine;
+ }

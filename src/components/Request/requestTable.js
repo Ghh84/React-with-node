@@ -4,11 +4,14 @@ import _ from 'lodash'
 import { Button, Alert } from "react-bootstrap";
 import AuthService from '../../services/auth.service'
 import TableHeader from "../common/tableHeader";
-import CurrencySelect from "../common/currency";
+// import CurrencySelect from "../common/currency"
+import configs from '../../configs/local'
+import '../../App.css';
 
  const RequestTable = ({columns, handlePageSwitch,sortColumn, handleSort,
     SelectedRequest, getUserName, handleApproveRequest, handleReject, Message,
-    errored,setAmount, amount,currency, setsCurrency, comment, setComment,handleRequest}) => {
+    errored,setAmount, amount,currency, setsCurrency, comment, setComment,handleRequest, visible, setVisible}) => {
+        
     return (
         <React.Fragment>
         {AuthService.getCurrentUser().role!==1 &&
@@ -34,12 +37,19 @@ import CurrencySelect from "../common/currency";
                         </div>
                     </div>
                    <label className="label" required >Currency</label>
-                   <CurrencySelect required='required' name='currency' setUsername={setsCurrency}error="" value={currency} />
+                   {/* <CurrencySelect required='required' name='currency' setUsername={setsCurrency}error="" value={currency} />
+                    */}
+                    <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Choose Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
                    <label className="label">Comment</label>
                    <textarea className="input--style-4" type="text" style={{minWidth:'300px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
                              
                <div className='input-group'>
-                    <Button variant='success' style={{marginLeft:'25px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handleRequest()}>Request</Button>
+                   <Button variant='success' style={{marginLeft:'25px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handleRequest()}>Request</Button>
                    <Button  variant='warning' style={{marginLeft:'30px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handlePageSwitch()}>Back</Button>
                </div>
            </form>
@@ -70,21 +80,26 @@ import CurrencySelect from "../common/currency";
                        <td>{item.currency}</td>
                        <td>{item.createdDate.substring(0, 10)}</td>
                        <td>{item.updatedDate.substring(0, 10)}</td>
-                       <td>{item.status}</td>
+                       {/* <td>{item.status}</td> */}
                        <td>{item.comment}</td>  
-                       {!(item.status=='Pending') &&
+                       {(item.status=='Approved') &&
                     <React.Fragment>
                        <td>
-                           <button disabled={true}  onClick={()=>handleApproveRequest(item,'Approved')} className="btn btn-primary btn-sm">Approve</button>
-                           &nbsp; &nbsp; &nbsp; &nbsp;
-                           <button disabled={true} onClick={() => handleReject(item,'Rejected')} className="btn btn-danger btn-sm">Reject</button>
+                           <button disabled={true}  onClick={()=>handleApproveRequest(item,'Approved')} className="btn btn-primary btn-sm">Approved</button>
+                       </td>
+                     </React.Fragment>
+                    }
+                     {(item.status=='Rejected') &&
+                    <React.Fragment>
+                       <td>
+                           <button disabled={true} onClick={() => handleReject(item,'Rejected')} className="btn btn-danger btn-sm">Rejected</button>
                        </td>
                      </React.Fragment>
                     }
                    {item.status=='Pending' &&
                     <React.Fragment>
                        <td>
-                           <button disabled={false}  onClick={()=>handleApproveRequest(item,'Approved')} className="btn btn-primary btn-sm">Approve</button>
+                           <button disabled={false} id='buttonVisibility' onClick={()=>handleApproveRequest(item,'Approved')} className="btn btn-primary btn-sm">Approve</button>
                            &nbsp; &nbsp; &nbsp; &nbsp;
                            <button  disabled={false} onClick={() => handleReject(item,'Rejected')} className="btn btn-danger btn-sm">Reject</button>
                        </td>

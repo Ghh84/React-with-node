@@ -21,7 +21,7 @@ class TableHeader extends Component {
 
   render() {
     return (
-      <thead className="thead-dark">
+      <thead className="tableHeader">
         <tr>
           {this.props.columns.map((column) => (
             <React.Fragment>

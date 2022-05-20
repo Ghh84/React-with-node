@@ -21,17 +21,18 @@ const Request=({handlePageSwitch,selectedTxn})=>{
     const [SelectedRequest, setSelectedRequest] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedPage, setSelectedPage] = useState('')
+    const [visible, setVisible] = useState(true);
     const dataLimit=4
     const [sortColumn, setColumnData] = useState({
         path: 'createdDate',
-        order: 'asc',
+        order: 'desc',
       })
     const columns=[{ path: 'name', label: 'Agent Name' },
     { path: 'Amount', label: 'Amount' },
     { path: 'currency', label: 'Currency' },
     { path: 'createdDate', label: 'Created Date' },
     { path: 'updatedDate', label: 'Updated Date' },
-    { path: 'status', label: 'Status' },
+    // { path: 'status', label: 'Status' },
     { path: 'comment', label: 'Additional Information' },
     { path: 'approveReject', label: 'Approve/Reject Request' }]
      
@@ -126,6 +127,8 @@ const Request=({handlePageSwitch,selectedTxn})=>{
                setsCurrency={setsCurrency}
                comment={comment}
                setComment={setComment}
+               visible={visible}
+               setVisible={setVisible}
            />
           
            <Pagination

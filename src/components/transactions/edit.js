@@ -4,9 +4,10 @@ import { Button, Alert } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import UserService from '../../services/user.service';
 import AuthService from '../../services/auth.service'
-import Country from "../common/country";
+// import Country from "../common/country";
 import Input from "../common/input";
-import CurrencySelect from "../common/currency";
+import configs from '../../configs/local'
+// import CurrencySelect from "../1 not used/currency";
 
 const Edit=({handlePageSwitch,selectedTxn})=>{
     console.log('selected transaction.........',selectedTxn)
@@ -173,26 +174,36 @@ return(
                 <form method="POST">
                 <h4 className="sub-title"> Sender Details:</h4>
                     <div className="row row-space">
-                        <Input name={sName} label="Name" required="required" setUsername={setsName} error="" value={sName}/>
-                        <Input name={sCity} label="City" required="required" setUsername={setsCity} error="" value={sCity}/>
-                        <Input name='sPhone' label="Phone" required="required" setUsername={setsPhone} error="" value={sPhone}/>
-                        <Input name={sAmount} label="Amount" required="required" setUsername={setsAmount} error="" value={sAmount}/>
+                        <Input name={sName} label="Name" required="required" setUsername={setsName} error="" value={sName}  classN='col-2'/>
+                        <Input name={sCity} label="City" required="required" setUsername={setsCity} error="" value={sCity} classN='col-2'/>
+                        <Input name='sPhone' label="Phone" required="required" setUsername={setsPhone} error="" value={sPhone} classN='col-2'/>
+                        <Input name={sAmount} label="Amount" required="required" setUsername={setsAmount} error="" value={sAmount} classN='col-2'/>
                     </div>
                     <div className="row row-space">
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Country</label>
                                 <div className="input-group-icon">                         
-                                    <Country value={sCountry}/>  
+                                <select class="form-control selectpicker"  onChange={(e)=>setrCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select>  
                                 </div>
                             </div>
                         </div>
-                        <Input name={sEmail} label="Email" required="" setUsername={setsEmail} error="" value={sEmail}/>  
+                        <Input name={sEmail} label="Email" required="" setUsername={setsEmail} error="" value={sEmail} classN='col-2'/>  
                         <div className="col-2">
                             <div className="input-group">
                             <label className="label">Currency</label>
                             <div className="input-group-icon"> 
-                                <CurrencySelect value={setsCurrency}/>
+                            <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
                             </div>
                             </div>
                         </div>
@@ -205,36 +216,47 @@ return(
                                 </div> 
                         </div>
                         </div> */}
-                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold}/>
+                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold} classN='col-2'/>
 
                         
                     </div>
                     <hr style={{backgroundColor:'gray',height:'2px'}}/>
                     <h4 className="sub-title">Receiver Details:</h4>
                     <div className="row row-space">
-                        <Input name={rName} label="Name" required="required" setUsername={setrName} error="" value={rName}/>
-                        <Input name={rCity} label="City" required="required" setUsername={setrCity} error="" value={rCity}/>
-                        <Input name={rPhone} label="Phone" required="required" setUsername={setrPhone} error="" value={rPhone}/>
-                        <Input name={rAmount} label="Amount" required="required" setUsername={setrAmount} error="" value={rAmount}/>
+                        <Input name={rName} label="Name" required="required" setUsername={setrName} error="" value={rName} classN='col-2'/>
+                        <Input name={rCity} label="City" required="required" setUsername={setrCity} error="" value={rCity} classN='col-2'/>
+                        <Input name={rPhone} label="Phone" required="required" setUsername={setrPhone} error="" value={rPhone} classN='col-2'/>
+                        <Input name={rAmount} label="Amount" required="required" setUsername={setrAmount} error="" value={rAmount} classN='col-2'/>
                     </div>
                     <div className="row row-space">
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Country</label>
                                 <div className="input-group-icon">                        
-                                    <Country value={rCountry}/>  
+                                <select class="form-control selectpicker"  onChange={(e)=>setrCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select>  
                                 
                             </div>
                         </div>
                         </div>
-                        <Input name={rEmail} label="Email" required="" setUsername={setrEmail} error="" value={rEmail}/>
+                        <Input name={rEmail} label="Email" required="" setUsername={setrEmail} error="" value={rEmail} classN='col-2'/>
                         {/* <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i> */}
                            
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Currency</label>
                                 <div className="input-group-icon">  
-                                    <CurrencySelect value={setrCurrency}/>
+                                    {/* <CurrencySelect value={setrCurrency}/> */}
+                                    <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected"> Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
                             {/* <div className="rs-select2 js-select-simple select--no-search">
                             <select class='form-control selectpicker' value={sCurrency} onChange={(e)=>setsCurrency(e.target.value)}>
                                 <option disabled="disabled" selected="selected">Choose Currency</option>
@@ -258,7 +280,7 @@ return(
                                 </div> 
                             </div>
                         </div> */}
-                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold}/>
+                        <Input name={sPlacehold} label="Placehold" required="" setUsername={setsPlaceholder} error="" value={sPlacehold} classN='col-2'/>
 
                     </div>
                     <hr style={{backgroundColor:'gray',height:'2px'}}/>
@@ -291,7 +313,7 @@ return(
                     <div className="col-2">                  
                     <div className="input-group">    
                                <label className="label">Reference</label>                          
-                                <input className="input--style-4" type="text" name="phone" value={referenceP} onChange={(e)=>setReference(e.target.value)}/>
+                                <input className="input--style-4" type="text" name="phone" value={referenceP} onChange={(e)=>setReference(e.target.value)} classN='col-2'/>
                             </div>
                     </div>
                     

@@ -72,9 +72,17 @@ class Input extends Component {
   }
 
   render() {
-    const { name, label, required, setUsername, error, value = '' } = this.props
+    const {
+      name,
+      label,
+      required,
+      setUsername,
+      error,
+      value = '',
+      classN = 'col-5',
+    } = this.props
     return (
-      <div className="col-2">
+      <div className={classN}>
         <div className="input-group">
           <label className="label">
             {' '}
