@@ -8,25 +8,25 @@ import TableHeader from "../common/tableHeader";
 import configs from '../../configs/local'
 import '../../App.css';
 
- const RequestTable = ({columns, handlePageSwitch,sortColumn, handleSort,
+ const RequestTable = ({columns, handlePageSwitch,setPageState,sortColumn, handleSort,
     SelectedRequest, getUserName, handleApproveRequest, handleReject, Message,
     errored,setAmount, amount,currency, setsCurrency, comment, setComment,handleRequest, visible, setVisible}) => {
         
     return (
         <React.Fragment>
         {AuthService.getCurrentUser().role!==1 &&
-       (<div className="card-body" style={{"height" : "25%", "width" : "30%","border": "3px solid black", "padding": "10px","marginLeft":"400px","marginTop":"0px"}}>
-           <div className="edit-top">         
-           <h2 className="title">Request balance form:</h2>
+       (<div  style={{maxWidth:'500px',alignContent:'center'}}>
+                  
+           <h2  style={{maxWidth:'350px'}}>Request balance form:</h2>
            <hr style={{backgroundColor:'gray',height:'2px'}}/>
-           </div>
+          
            {Message &&
                        <Alert variant='success'>{Message}</Alert>}
            {errored &&
                        <Alert variant='danger'>{errored}</Alert>}
            <form method="POST">
                     {/* <Input name='amount' label="Amount" required="required" setUsername={setAmount} error="" value={amount} /> */}
-                    <div className="col-5">
+                    <div className="col-2" style={{maxWidth:'200px'}}>
                         <div className="input-group">
                             <label className="label">Amount<span class="required"></span></label>
                             <div className="input-group-icon">
@@ -36,7 +36,10 @@ import '../../App.css';
                             </div>
                         </div>
                     </div>
+                    <div className="col-2" style={{maxWidth:'200px'}}>
+                    <div className="input-group">
                    <label className="label" required >Currency</label>
+                   </div>
                    {/* <CurrencySelect required='required' name='currency' setUsername={setsCurrency}error="" value={currency} />
                     */}
                     <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
@@ -45,14 +48,19 @@ import '../../App.css';
                                     return <option value={c}>{c}</option>
                                 })}
                             </select> 
+                            </div>
+                <div className="col-2">
+                    <div className="input-group">
                    <label className="label">Comment</label>
+                   </div>
                    <textarea className="input--style-4" type="text" style={{minWidth:'300px'}}name="first_name" value={comment} onChange={(e)=>setComment(e.target.value)}/>
-                             
+                    </div>         
                <div className='input-group'>
                    <Button variant='success' style={{marginLeft:'25px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handleRequest()}>Request</Button>
                    <Button  variant='warning' style={{marginLeft:'30px',marginTop:'25px',minWidth:'0px'}} onClick={()=>handlePageSwitch()}>Back</Button>
                </div>
            </form>
+       
        </div>)
        }
        {AuthService.getCurrentUser().role===1 &&

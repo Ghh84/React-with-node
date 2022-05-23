@@ -9,7 +9,7 @@ import BalanceService from "../../services/balance.service";
 import Pagination from "../common/Pagination";
 import RequestTable from './requestTable';
 
-const Request=({handlePageSwitch,selectedTxn})=>{
+const Request=({handlePageSwitch,setPageState,selectedTxn})=>{
     console.log('selected request.........',selectedTxn)
     const [amount,setAmount]=useState('0')
     const [currency,setsCurrency]=useState('NKF')
@@ -77,12 +77,11 @@ const Request=({handlePageSwitch,selectedTxn})=>{
         const editObject={
             amount:amount,
             currency:currency,
-            userId:AuthService.getCurrentUser().id,
+            userId:AuthService.getCurrentUser().userId,
             comment:comment
         }
         
         //validate data before sending
-        alert(amount)
         BalanceRequestService.addRequest(editObject).then((res)=>{
             
             setMessage('Transaction was successfully updated');
@@ -92,7 +91,11 @@ const Request=({handlePageSwitch,selectedTxn})=>{
             setErrored('Transaction update failed')
         })
     }   
-     
+    // function handlePageSwitch(){
+    //     alert('I am here')
+    //     setPageState({ isEdit: 0, isAdd: 0, isRequest:0});
+    //     window.location.reload(false)
+    //   }    
     useEffect(()=>{
         UserService.getUsers().then((res)=>{
             console.log('at response from users',res.data)
@@ -113,6 +116,7 @@ const Request=({handlePageSwitch,selectedTxn})=>{
                columns={columns}
                handleRequest={handleRequest}
                handlePageSwitch={handlePageSwitch}
+               setPageState={setPageState}
                sortColumn={sortColumn}
                handleSort={handleSort}
                SelectedRequest={getPaginatedData()}
@@ -130,7 +134,7 @@ const Request=({handlePageSwitch,selectedTxn})=>{
                visible={visible}
                setVisible={setVisible}
            />
-          
+         {AuthService.getCurrentUser().role===1 &&
            <Pagination
                 data={SelectedRequest}
                 dataLimit={dataLimit}
@@ -138,6 +142,7 @@ const Request=({handlePageSwitch,selectedTxn})=>{
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
            />
+         }
         </div>   
 )
 }

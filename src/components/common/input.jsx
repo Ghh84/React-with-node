@@ -6,28 +6,28 @@ class Input extends Component {
     data: {},
     errors: {},
   }
-  schema = {
-    userId: Joi.string(),
-    sName: Joi.string().required().label('Name'),
-    sCity: Joi.string().required().label('City'),
-    sAmount: Joi.string().required().label('Amount'),
-    sCountry: Joi.string().required().label('Country'),
-    sName: Joi.string().required().label('Name'),
-    sCurrency: Joi.string().required().label('Currency'),
-    sPhone: Joi.number().required().min(0).max(100).label('Phone'),
-    sEmail: Joi.string().email(),
-    sName: Joi.string().required().label('Name'),
-    sCity: Joi.string().required().label('City'),
-    sAmount: Joi.string().required().label('Amount'),
-    sCountry: Joi.string().required().label('Country'),
-    rName: Joi.string().required().label('Name'),
-    rCurrency: Joi.string().required().label('Currency'),
-    rPhone: Joi.number().required().min(0).max(100).label('Phone'),
-    rEmail: Joi.string().email(),
+  // schema = {
+  //   userId: Joi.string(),
+  //   sName: Joi.string().required().label('Name'),
+  //   sCity: Joi.string().required().label('City'),
+  //   sAmount: Joi.string().required().label('Amount'),
+  //   sCountry: Joi.string().required().label('Country'),
+  //   sName: Joi.string().required().label('Name'),
+  //   sCurrency: Joi.string().required().label('Currency'),
+  //   sPhone: Joi.number().required().min(0).max(100).label('Phone'),
+  //   sEmail: Joi.string().email(),
+  //   sName: Joi.string().required().label('Name'),
+  //   sCity: Joi.string().required().label('City'),
+  //   sAmount: Joi.string().required().label('Amount'),
+  //   sCountry: Joi.string().required().label('Country'),
+  //   rName: Joi.string().required().label('Name'),
+  //   rCurrency: Joi.string().required().label('Currency'),
+  //   rPhone: Joi.number().required().min(0).max(100).label('Phone'),
+  //   rEmail: Joi.string().email(),
 
-    username: Joi.string().required().label('Username'),
-    password: Joi.string().required().label('Password'),
-  }
+  //   username: Joi.string().required().label('Username'),
+  //   password: Joi.string().required().label('Password'),
+  // }
 
   validate = () => {
     const options = { abortEarly: false }

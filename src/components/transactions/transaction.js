@@ -3,7 +3,6 @@ import React,{useEffect, useState,useRef} from 'react'
 import Add from './add';
 import Edit from './edit'
 import Request from "../Request/request";
-//import { Button, Alert,Glyphicon } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -20,27 +19,23 @@ const Transaction=()=> {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [txData,settxData]=useState([])
-  //const [resdata,setData]=useState([])
   const [users,setUsers]=useState([])
   const [usdBalance,setUsdBalance]=useState(0)
   const [localBalance,setLocalBalance]=useState(0)
   const [selectedPage, setSelectedPage] = useState('')
 
-
-
 function handleAdd() {
   setPageState({ isEdit: 1, isAdd: 1 ,isRequest:0})
 }
-function handleRequest() {
-  //
-  setPageState({ isRequest: 1, isAdd:0, isEdit:0})
-}
-function handleSeeRequest() {
-  setPageState({ isRequest: 1, isAdd:0,isEdit:0})
-  //<Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
-}
+// function handleRequest() {
+//   //
+//   setPageState({ isRequest: 1, isAdd:0, isEdit:0})
+// }
+// function handleSeeRequest() {
+//   setPageState({ isRequest: 1, isAdd:0,isEdit:0})
+//   //<Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
+// }
 function handleSearch(e,property){
-  
   console.log('######',property,e.target.value)
   const txDataTemp=[...txData]
   console.log('######',txDataTemp)
@@ -64,6 +59,7 @@ function handleChange(e,property){
  handleSearch(e,property)
 }
 function handlePageSwitch(){
+  alert('I reached')
   setPageState({ isEdit: 0, isAdd: 0, isRequest:0});
   window.location.reload(false)
 }
@@ -75,7 +71,6 @@ useEffect(()=>{
       console.log('response from users',res.data)
       let userResponse=res.data
       console.log('current user',AuthService.getCurrentUser())
-
       if(AuthService.getCurrentUser().role!==1){
         //filter transaction data based on agent
         let filtered=response.filter((f=>f.userId==AuthService.getCurrentUser().userId))
@@ -94,19 +89,20 @@ useEffect(()=>{
        console.log('error fetching data from transaction table..........')
        
    })
-   users.map(e=>{
    BalanceService.getBalances().then((res)=>{
     res.data.map(user => {
-      if(user.userId==e.userId){
+      
+      if(user.userId==AuthService.getCurrentUser().userId){   
         setUsdBalance(user.USDbalance)
         setLocalBalance(user.localBalance)
       }
      })
      })
-   })
+   
  
 },[])
 console.log('user....',users)
+// alert(usdBalance)
   return(
         <div className='transactions'>         
           {!isEdit && !isAdd && isRequest==0?(
@@ -150,19 +146,12 @@ console.log('user....',users)
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <div className='datepickercss'>
             <div>
-          Start Date: <DatePicker className='input--style-4' selected={startDate} style={{marginLeft:'0'}} onChange={(Date) => setStartDate(Date)} />
+              Start Date: <DatePicker className='input--style-4' selected={startDate} style={{marginLeft:'0'}} onChange={(Date) => setStartDate(Date)} />
             </div>
             <div>
-          End Date: <DatePicker className='input--style-4' selected={endDate} onChange={(Date) => setEndDate(Date)}/>
+                End Date: <DatePicker className='input--style-4' selected={endDate} onChange={(Date) => setEndDate(Date)}/>
             </div>
-            
-            {/* {AuthService.getCurrentUser().role===1 &&
-           <div>
-            <Button variant='primary'  style={{marginBottom:'5px',marginTop:'25px',minWidth:'150px',maxHeight:'20px'}} onClick={()=>handleSeeRequest()}>See your request</Button> 
-          </div>
-            } */}
-     
-          </div>
+            </div>
           <div>
           {AuthService.getCurrentUser().role===1 &&
             <div>
@@ -170,31 +159,18 @@ console.log('user....',users)
            </div>
                 }
           {AuthService.getCurrentUser().role!==1 &&
-              <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'>Usd Balance:<p class="balanceNumber">{!!users[0]?parseFloat(usdBalance).toLocaleString('en-US'):''}</p></div>        
+              <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'>Usd Balance:<p class="balanceNumber">{usdBalance}</p></div>        
           }
-          
-
           </div>
           {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
           <div>
           {AuthService.getCurrentUser().role!==1 &&
-          <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'>local Balance:<p class="balanceNumber">{!!users[0]?parseFloat(localBalance).toLocaleString('en-US'):''}</p></div>
+          <div style={{marginLeft:'5px',fontWeight:'bold'}} className='balance-box'>local Balance:<p class="balanceNumber">{localBalance}</p></div>
           }
           </div>
-          {/*<div className="col-9">
-           <div className="row-9"><span>&nbsp;&nbsp;</span></div>
-          
-          {AuthService.getCurrentUser().role!==1 &&
-            <Button variant='primary'  style={{marginBottom:'5px',maxHeight:'40px'}} onClick={()=>handleRequest()}>Request Balance</Button>
-          }
-          </div> */}
           </div>
           <div className='log-pagination'>
-        {/* transsaction first page after login  
-         and Paginate data
-        */}
-        
-        
+        {/* transsaction first page after login and Paginate data */}
         <TransactionTable 
            data={txData}
            dataLimit={4}
@@ -205,30 +181,15 @@ console.log('user....',users)
            selectedTxn={selectedTxn}
            setSelectedTxn={setSelectedTxn}
         />
-        {/* adding pagination to the transaction page */}
-        {/* <Pagination
-                  data={txData}
-                  dataLimit={3}
-                  pageLimit={5}
-                  setPageState={setPageState}
-                  selectedPage={selectedPage}
-                  setSelectedPage={setSelectedPage}
-                  handleSelection={handleSelection}
-        />  */}
         </div>
             </div>
             
           ):isEdit && !isAdd && isRequest==0?(
         <Edit handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>)
         :!isEdit && !isAdd && isRequest==1?
-        <Request handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>:
+        <Request handlePageSwitch={handlePageSwitch} setPageState={selectedPage} selectedTxn={selectedTxn}/>:
         <Add handlePageSwitch={handlePageSwitch} selectedTxn={selectedTxn}/>
         }
-        {/* {isRequest==1 &&
-          <Add handlePageSwitch={handlePageSwitch}/>
-          
-        } */}
-
         </div>      
   )    
 }
