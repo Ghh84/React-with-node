@@ -1,6 +1,7 @@
-import React from 'react'
-import {Route,Link,Redirect} from 'react-router-dom'
+import React,{useState} from 'react'
+import {Route,NavLink,Redirect} from 'react-router-dom'
 import AuthService from '../services/auth.service';
+import Balance from './balance/balance';
 	const useAuth=()=>{
 	  const user=localStorage.getItem('user')
       console.log('user........private',user)
@@ -10,11 +11,29 @@ import AuthService from '../services/auth.service';
 	    return false
 	  }
 	}
-	
-
 	export default function PrivateRoute({component:Component,...rest}){
 	  const auth=useAuth()
 	  console.log('auth...',auth)
+   
+  const [activeStyle,setActiveStyle] = useState({transaction:{ color: '#ff3333' },user:{ color: '' },balance:{ color: '' },request:{ color: '' }});
+    const _handleClick=(value)=> { 
+      if(value==='transaction') {
+        setActiveStyle({})
+        setActiveStyle({transaction:{ color: '#ff3333'}})
+      }  
+      else if(value==='user'){
+        setActiveStyle({})
+        setActiveStyle({user:{ color: '#ff3333'}})
+      }
+      else if(value==='balance'){
+        setActiveStyle({})
+        setActiveStyle({balance:{ color: '#ff3333'}})
+      }
+      else if(value==='request'){
+        setActiveStyle({})
+        setActiveStyle({request:{ color: '#ff3333'}})
+      }
+    }
 	  return (
 		<Route render={()=>
 		auth?
@@ -22,54 +41,86 @@ import AuthService from '../services/auth.service';
 		<div>
 			<div className='navigation'>
 			<header>
-			
 			<nav>
 			   <ul>
-			   <li className="nav-item px-3">
-                        <div className="nav-link active">
+			   <li className="nav-item px-3" key={1}>
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Transactions"} className="nav-link">
+                          <NavLink to={"/Transactions"}
+                              className="nav-NavLink"  
+                              style={ activeStyle.transaction } 
+                              onClick={_handleClick.bind(this,'transaction')}>
                             Transactions
-                          </Link>
+                          </NavLink>
+                          
                         </div>
                       </li>
                       {AuthService.getCurrentUser().role==1 &&<>
-					  <li className="nav-item px-3">
-                        <div className="nav-link active">
+					<li className="nav-item px-3" key={2}>
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Users"} className="nav-link">
+                          <NavLink to={"/Users"} className="nav-NavLink" style={ activeStyle.user } 
+                              onClick={_handleClick.bind(this,'user')}>
                             Users
-                          </Link>
+                          </NavLink>
                         </div>
-                      </li>
-					  <li className="nav-item px-3">
-                        <div className="nav-link active">
+          </li>
+					<li className="nav-item px-3" key={3}>
+                        <div className="nav-NavLink active">
+                          {/* <span
+                            className="oi oi-home"
+                            aria-hidden="true"
+                          ></span>{" "} */}
+                          <NavLink to={"/Balance"} className="nav-NavLink" style={ activeStyle.balance } 
+                              onClick={_handleClick.bind(this,'balance')}>
+                            Balance
+                          </NavLink>
+                        </div>
+          </li>
+          <li className="nav-item px-3" key={4}>
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Balance"} className="nav-link">
-                            Balance
-                          </Link>
+                          <NavLink to={"/Request"} className="nav-NavLink" style={ activeStyle.request } 
+                              onClick={_handleClick.bind(this,'request')}>
+                            Request
+                          </NavLink>
                         </div>
-                      </li>
+          </li>
                       </>
                       }
-					  <li className="nav-item px-2">
-                        <div className="nav-link active">
+              {AuthService.getCurrentUser().role!=1 &&
+                      <li className="nav-item px-3" key={4}>
+                      <div className="nav-NavLink active">
+                        <span
+                          className="oi oi-home"
+                          aria-hidden="true"
+                        ></span>{" "}
+                        <NavLink to={"/Request"} className="nav-NavLink" style={ activeStyle.request } 
+                            onClick={_handleClick.bind(this,'request')}>
+                          Request Balance
+                        </NavLink>
+                      </div>
+                    </li>
+              }
+					  <li className="nav-item px-2" key={5}>
+                        <div className="nav-NavLink active">
                           <span
                             className="oi oi-home"
                             aria-hidden="true"
                           ></span>{" "}
-                          <Link to={"/Logout"} className="nav-link" style={{backgroundColor:'white'}}>
+                          <NavLink to={"/Logout"}  className="font-weight-bold" 
+                              >
                             LogOut
-                          </Link>
+                          </NavLink>
                         </div>
                       </li>
 			   </ul>
@@ -82,6 +133,4 @@ import AuthService from '../services/auth.service';
 	  />
 	  ) 
 	}
-	
-
 	//export default PrivateRoute;

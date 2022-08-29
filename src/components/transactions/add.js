@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Button, Alert } from "react-bootstrap";
 import TransactionService from '../../services/transaction.service';
 import UserService from '../../services/user.service';
-import Countries from "../../utils/countries";
+import AuthService from '../../services/auth.service';
+import configs from '../../configs/local'
 import _ from 'lodash'
 const Add=({handlePageSwitch})=>{
       const [sName,setsName]=useState('')
@@ -47,14 +48,15 @@ const Add=({handlePageSwitch})=>{
         }
         console.log('going to add a new transaction....',addObject)
         //validate data before sending
+        
         if(addObject.sName==''||addObject.sAmount==''||addObject.sPhone==''|| addObject.rName==''||addObject.rAmount==''||
         addObject.rPhone=='' ||addObject.userId=='' || addObject.rCurrency=='') setMessage('One or more information is missing!')
         else{
         TransactionService.addTransaction(addObject).then((res)=>{
+            
             console.log('response from addition',res.data)
             setErrored('')
-                  setSucceded('A new Transaction is successfully added!')
-                  setMessage('')
+            setSucceded('A new Transaction is successfully added!')
         }).catch((err)=>{
             setSucceded('')
             setErrored('New Transaction creation failed!')
@@ -63,6 +65,8 @@ const Add=({handlePageSwitch})=>{
     }
       }
       useEffect(()=>{
+
+        setUserId(AuthService.getCurrentUser().userId)
         UserService.getUsers().then((res)=>{
             console.log('response from users',res.data)
             setUsers(res.data)
@@ -85,29 +89,36 @@ return(
                 <form method="POST">
                 <h4 className="sub-title"> Sender Details:</h4>
                     <div className="row row-space">
-                        
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Name<span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="first_name" onChange={(e)=>setsName(e.target.value)}/>
+                                <div className="input-group-icon">
+                                <input className="form-control"  type="text" name="first_name" onChange={(e)=>setsName(e.target.value)}/>
+                                </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">City</label>
-                                <input className="input--style-4" type="text" name="first_name" onChange={(e)=>setsCity(e.target.value)}/>
+                                <div className="input-group-icon">
+                                    <input className="form-control"  type="text" name="first_name" onChange={(e)=>setsCity(e.target.value)}/>
+                                </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Phone <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="first_name" onChange={(e)=>setsPhone(e.target.value)}/>
+                                <div className="input-group-icon">
+                                    <input className="form-control"  type="text" name="first_name" onChange={(e)=>setsPhone(e.target.value)}/>
+                                </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Amount <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="first_name" onChange={(e)=>setsAmount(e.target.value)}/>
+                                <div className="input-group-icon">
+                                    <input className="form-control"  type="text" name="first_name" onChange={(e)=>setsAmount(e.target.value)}/>
+                                </div>
                             </div>
                         </div>
                         
@@ -117,13 +128,12 @@ return(
                             <div className="input-group">
                             <label className="label">Country</label>
                             <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker' onChange={(e)=>setsCountry(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Country</option>
-                                <option value='Canada'>Canada</option>
-                                <option value='Eritrea'>Eritrea</option>
-                                <option value='Ethiopia'>Ethiopia</option>
-                                <option value='Uganda'>Uganda</option>
-                            </select>
+                            <select class="form-control selectpicker"  onChange={(e)=>setsCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
                             <div className="select-dropdown"></div>
                         </div>
                             </div>
@@ -132,7 +142,7 @@ return(
                             <div className="input-group">
                                 <label className="label">Email</label>
                                 <div className="input-group-icon">
-                                    <input className="input--style-4 js-datepicker" type="text" name="birthday" onChange={(e)=>setsEmail(e.target.value)}/>
+                                    <input className="form-control" type="text" name="birthday" onChange={(e)=>setsEmail(e.target.value)}/>
                                     <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                 </div>
                             </div>
@@ -141,13 +151,19 @@ return(
                             <div className="input-group">
                             <label className="label">Currency</label>
                             <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker' onChange={(e)=>setsCurrency(e.target.value)}>
+                            {/* <select class='form-control selectpicker' onChange={(e)=>setsCurrency(e.target.value)}>
                                 <option disabled="disabled" selected="selected">Choose Currency</option>
                                 <option value='CAD'>CAD</option>
                                 <option value='NKF'>NKF</option>
                                 <option value='BIRR'>BIRR</option>
                                 <option value='Shilling'>Shilling</option>
-                            </select>
+                            </select> */}
+                            <select class="form-control selectpicker"  onChange={(e)=>setsCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
                             <div className="select-dropdown"></div>
                         </div>
                             </div>
@@ -156,7 +172,7 @@ return(
                             <div className="input-group">
                                 <label className="label">Placeholder</label>
                                 <div className="input-group-icon">
-                                    <input className="input--style-4 js-datepicker" type="text" name="birthday"/>
+                                    <input className="form-control" type="text" name="birthday"/>
                                     <i className="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                 </div>
                             </div>
@@ -169,25 +185,33 @@ return(
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Name <span class="required"></span></label>
-                                <input className="input--style-4" type="email" name="email" onChange={(e)=>setrName(e.target.value)}/>
+                            <div className="input-group-icon">
+                                <input className="form-control"  type="email" name="email" onChange={(e)=>setrName(e.target.value)}/>
+                            </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">City</label>
-                                <input className="input--style-4" type="text" name="phone" onChange={(e)=>setrCity(e.target.value)}/>
+                            <div className="input-group-icon">
+                                <input className="form-control"  type="text" name="phone" onChange={(e)=>setrCity(e.target.value)}/>
+                            </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Phone <span class="required"></span></label>
-                                <input className="input--style-4" type="email" name="email" onChange={(e)=>setrPhone(e.target.value)}/>
+                            <div className="input-group-icon">
+                                <input className="form-control"  type="email" name="email" onChange={(e)=>setrPhone(e.target.value)}/>
+                            </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Amount <span class="required"></span></label>
-                                <input className="input--style-4" type="text" name="phone" onChange={(e)=>setrAmount(e.target.value)}/>
+                            <div className="input-group-icon">
+                                <input className="form-control"  type="text" name="phone" onChange={(e)=>setrAmount(e.target.value)}/>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -196,13 +220,13 @@ return(
                             <div className="input-group">
                             <label className="label">Country</label>
                             <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker' onChange={(e)=>setrCountry(e.target.value)}>
-                                <option disabled="disabled" selected="selected">Choose Country</option>
-                                <option value='Canada'>Canada</option>
-                                <option value='Eritrea'>Eritrea</option>
-                                <option value='Ethiopia'>Ethiopia</option>
-                                <option value='Uganda'>Uganda</option>
-                            </select>
+                            <select class="form-control selectpicker"  onChange={(e)=>setrCountry(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Country</option>
+                                {configs.countries.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
+
                             <div className="select-dropdown"></div>
                         </div>
                             </div>
@@ -210,20 +234,29 @@ return(
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Email</label>
-                                <input className="input--style-4" type="text" name="phone" onChange={(e)=>setrEmail(e.target.value)}/>
+                                <div className="input-group-icon">
+                                    <input className="form-control"  type="text" name="phone" onChange={(e)=>setrEmail(e.target.value)}/>
+                                </div>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
                             <label className="label">Currency <span class="required"></span></label>
                             <div className="rs-select2 js-select-simple select--no-search">
-                            <select class='form-control selectpicker' onChange={(e)=>setrCurrency(e.target.value)}>
+                            {/* <select class='form-control selectpicker' onChange={(e)=>setrCurrency(e.target.value)}>
                                 <option disabled="disabled" selected="selected">Choose Currency</option>
                                 <option value='CAD'>CAD</option>
                                 <option value='NKF'>NKF</option>
                                 <option value='BIRR'>BIRR</option>
                                 <option value='Shilling'>Shilling</option>
-                            </select>
+                            </select> */}
+                            <select class="form-control selectpicker"  onChange={(e)=>setrCurrency(e.target.value)}>
+                                <option disabled="disabled" selected="selected">Currency</option>
+                                {configs.currencies.map((c,index)=>{
+                                    return <option value={c}>{c}</option>
+                                })}
+                            </select> 
+                            
                             <div className="select-dropdown"></div>
                         </div>
                             </div>
@@ -231,7 +264,9 @@ return(
                         <div className="col-2">
                             <div className="input-group">
                                 <label className="label">Placeholder</label>
-                                <input className="input--style-4" type="text" name="phone"/>
+                                <div className="input-group-icon">
+                                    <input className="form-control"  type="text" name="phone"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -252,29 +287,28 @@ return(
                     </div>
                     </div>
                     
-                    <div className="col-2">                  
-                    <div className="input-group">    
-                    <label className="label">Reference</label>                          
-                                <input className="input--style-4" type="text" name="phone" onChange={(e)=>setReference(e.target.value)}/>
-                            </div>
+                    <div className="col-2">   
+                        <div className="input-group"> 
+                            <label className="label">Reference</label>   
+                            <div className="input-group-icon">
+                                <input className="form-control"  type="text" name="phone" onChange={(e)=>setReference(e.target.value)}/>
+                            </div>                       
+                        </div>
                     </div>
                     </div>
-                    <div className="row ">
-                    <div className="col-12">
-                    <div className='input-group'>
-                        <div className="flexButtons">
-                        <Button variant='success' className="bsuccess" style={{}} onClick={()=>handleAdd()}>Add</Button>
-                        <Button  variant='warning' className="bwarning" style={{marginLeft:'50px',minWidth:'100px'}} onClick={()=>handlePageSwitch()}>Back</Button>
-                        </div>
-                        </div>
-
+                    <div className="row row-space">
+                    < span></span><span></span><span></span><span></span><span></span><span></span>
+                    <div > <Button variant='success' className="bsuccess" style={{}} onClick={()=>handleAdd()}>Add</Button>
+                        <Button  variant='warning' className="bwarning" style={{marginLeft:'10px',minWidth:'10px'}} onClick={()=>handlePageSwitch()}>Back</Button>
+                    </div>
                     </div>
                     
-                    </div>
-                </form>
+              </form>
             </div>
         </div>
+        
     </div>
+    
 </div>
 </div>
 )

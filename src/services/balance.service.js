@@ -15,6 +15,14 @@ class BalanceService {
             headers: authHeader()
         })
     }
+    updateBalanceFromRequest(balanceData) {
+        return axios({
+            method: 'POST',
+            data: balanceData,
+            url: '/api/updateBalanceFromRequest',
+            headers: authHeader()
+        })
+    }
     addBalance(balanceData) {
         return axios({
             method: 'POST',

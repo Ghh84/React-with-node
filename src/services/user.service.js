@@ -34,6 +34,9 @@ class UserService {
     getUser(userId) {
         return axios.get(`/api/getUser/${userId}`, { headers: authHeader() }, { timeout: 5000 });
     }
+    // getUserByName(name) {
+    //     return axios.get(`/api/getUserByName`,{name}, { headers: authHeader() }, { timeout: 5000 });
+    // }
 
 }
 

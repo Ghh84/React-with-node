@@ -5,10 +5,12 @@
 /app/node_modules
 /.pnp
 .pnp.js
-
+node_modules
+app/node_modules
 # testing
 /coverage
-
+.env
+/configs
 # production
 /build
 
